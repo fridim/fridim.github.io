@@ -9,9 +9,6 @@ Blog
 * 2014-11-26 [problème euler 60](https://gist.github.com/fridim/0250192c183256e8744f)
 * 2014-06-25 [create an OpenBSD live USB stick](notes/livebsd.html)
 
-→ [All notes](notes/)
-
-
 Contact
 -------
 
