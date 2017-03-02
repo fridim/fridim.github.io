@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Guillaume Coré (fridim) - personal page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="StyleSheet" rev="StyleSheet" href="/pygments.css" type="text/css" />
+  <!-- <link rel="StyleSheet" rev="StyleSheet" href="/bootstrap.min.css" type="text/css" /> -->
+  <link rel="StyleSheet" rev="StyleSheet" href="/index.css" type="text/css" />
+
+</head>
+
+<body>
+<h1>Tor hidden service on Openshift 3</h1>
+<p><small>2016-10-04 ~ #openshift #tor</small></p>
+<p><img alt="tor on openshift" src="../images/tor_openshift.png" /></p>
+<p>Table of content:</p>
+<ul>
+<li><a href="#toc-id-0">The Application</a></li>
+<li><a href="#toc-id-1">Expose your app on Tor and get your .onion</a><ul>
+<li><a href="#toc-id-2">Tor HiddenServicePort</a></li>
+<li><a href="#toc-id-3">one-line command to expose a service</a></li>
+<li><a href="#toc-id-4">Tor Configuration</a></li>
+<li><a href="#toc-id-5">configMap</a></li>
+<li><a href="#toc-id-6">Persistent .onion</a></li>
+</ul>
+</li>
+<li><a href="#toc-id-7">Scalability with onionbalance</a><ul>
+<li><a href="#toc-id-8">Create more tor instances</a></li>
+<li><a href="#toc-id-9">configure onionbalance daemon</a></li>
+<li><a href="#toc-id-10">Generate master private_key</a></li>
+<li><a href="#toc-id-11">onionbalance status socket</a></li>
+<li><a href="#toc-id-12">scale up onionbalance</a></li>
+</ul>
+</li>
+<li><a href="#toc-id-13">Templates</a><ul>
+<li><a href="#toc-id-14">onionshift</a></li>
+<li><a href="#toc-id-15">onionbalance</a></li>
+</ul>
+</li>
+<li><a href="#toc-id-16">Monitor tor daemon with arm</a></li>
+<li><a href="#toc-id-17">Links</a></li>
+<li><a href="#toc-id-18">Ideas and TODOs</a></li>
+</ul>
+<hr />
+<p><strong>TL;DR ?</strong></p>
+<ul>
+<li>GO <a href="#tldr2">THERE</a> for Openshift templates to quickly do the job for both tor and onionbalance</li>
+<li>GO <a href="#tldr">THERE</a> for one-line command to quickly expose an openshift service on tor.</li>
+</ul>
+<hr />
+<p>So i asked myself :</p>
+<ul>
+<li>How to simply expose your Openshift app via Tor ?</li>
+<li>How hard would it be ?</li>
+<li>Would it scale ?</li>
+</ul>
+<p>Why ?</p>
+<ul>
+<li>for fun</li>
+<li>your app audience needs a tor .onion access (journalists, ...)</li>
+<li>use Tor as an alternative mean to expose your Openshift App. Thanks to HiddenServiceAuthorizeClient option, you can even expose it to only specific users.</li>
+<li>Why not take advantage of Openshift scalability and HA to host Tor hidden services ?</li>
+</ul>
+<div class='warning'>
+If your goal is really security, you have to make sure the underlying platform (Openshift) and infrastructure (cloud provider or Baremetal) are trustworthy.
+</div>
+
+<p>Here the logic diagram of what i'll try to accomplish :</p>
+<p><img alt="tor on Openshift" src="../images/tor1.png" /></p>
+<p>Some observations:</p>
+<ul>
+<li>to get a single .onion address for a service is easy, see <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">official doc</a></li>
+<li>(kindof) load-balancing is possible by creating 2 or more tor instances sharing the same private_key</li>
+<li>to load-balance  over several .onion you need an additional daemon, <a href="http://onionbalance.readthedocs.io/en/latest/index.html">onionbalance</a></li>
+</ul>
+<p>In this schema, the Tor pods serve different .onion hostname, so you'll have to communicate those addresses to the users.</p>
+<p><strong>Unless</strong> you setup an additional tool: <a href="http://onionbalance.readthedocs.io/en/latest/index.html">onionbalance</a>. It is possible to loadbalance tor .onion but it requires onionbalance, which acts as a kind of DNS round robin but for Tor:</p>
+<p><img alt="torbalance" src="../images/onionbalance.png" /></p>
+<p>In this post, i'll describe all the steps i've been through. I'll start with a simple one-instance tor .onion. Then try onionbalance and see how it can be "Openshiftized". The ideal would be to be able to scale up and down tor pods and have the onionbalance pod updated automatically.
+At the end, i'll try to summarize everything into a template.</p>
+<p><a id='toc-id-0' /></p>
+<h2>The Application</h2>
+<p>In this exercise i do not care about the app at all, so i just run :</p>
+<div class="codehilite"><pre><span></span>oc new-app centos/ruby-22-centos7~https://github.com/openshift/ruby-ex.git
+</pre></div>
+
+
+<p>It creates pods and a <code>ruby-ex</code> service i'll route later via Tor.</p>
+<p><a id='toc-id-1' /></p>
+<h2>Expose your app on Tor and get your .onion</h2>
+<p><a id='toc-id-2' /></p>
+<h3>Tor HiddenServicePort</h3>
+<p>To be able to reach your app via a .onion URL, server-side you'll need a tor daemon (client mode) running
+with an hidden service configured pointing to your openshift service.</p>
+<p>I searched if there was any existing Docker image for tor (of course there is one..) and found this <a href="https://github.com/chriswayg/tor-alpine">Dockerfile</a>.</p>
+<p>It compiles tor on <a href="http://www.alpinelinux.org/">Alpine</a>, which is tiny (4.795MB), secure, etc. It sounds like a good plan.</p>
+<p>So i forked this repo, removed all the unecessary stuff, added other stuff, like rsync to be able to use <code>oc rsync</code>. My idea was: Everything that will be handled by openshift can be moved out so the image is agnostic.</p>
+<p>Here is the result : <a href="https://github.com/fridim/onionshift">https://github.com/fridim/onionshift</a></p>
+<p><a id='toc-id-3' /></p>
+<h3>one-line command to expose a service</h3>
+<p><span id="tldr"></span></p>
+<div class="codehilite"><pre><span></span>oc new-app https://github.com/fridim/onionshift -e <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex,SERVICE_PORT<span class="o">=</span>8080
+</pre></div>
+
+
+<p>This will create everything (deployment config, buildconfig, ...) and pod will have a simple torrc based on the <a href="https://github.com/fridim/onionshift/blob/master/torrc.template">template</a> in the repository. It's dead simple, and if you want to add a more complex tor configuration, you can use configMap (see <a href="#configmap">bellow</a>).</p>
+<p>You should see the docker build and the final push to the registry. Then a pod onionshift-... should be running.</p>
+<p>Tor will create a private_key and hostname in the directory specified by <code>HiddenServiceDir</code>.</p>
+<p>Check the logs :</p>
+<div class="codehilite"><pre><span></span>$ oc logs tor-7-buxlt
++ <span class="nb">cd</span> /data
++ <span class="nb">export</span> <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex
++ <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex
++ <span class="nb">export</span> <span class="nv">SERVICE_PORT</span><span class="o">=</span>8080
++ <span class="nv">SERVICE_PORT</span><span class="o">=</span>8080
++ <span class="nb">export</span> <span class="nv">HS_PORT</span><span class="o">=</span>80
++ <span class="nv">HS_PORT</span><span class="o">=</span>80
++ <span class="s1">&#39;[&#39;</span> <span class="s1">&#39;!&#39;</span> -e /etc/tor/torrc <span class="s1">&#39;]&#39;</span>
++ envsubst
++ /usr/bin/tor -f torrc
+Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor v0.2.8.7 running on Linux with Libevent 2.0.22-stable, OpenSSL 1.0.2j and Zlib 1.2.8.
+Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor can<span class="err">&#39;</span>t <span class="nb">help</span> you <span class="k">if</span> you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Read configuration file <span class="s2">&quot;/data/torrc&quot;</span>.
+Sep <span class="m">29</span> 13:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Wow!  I detected that you have <span class="m">24</span> CPUs. I will not autodetect any more than 16, though.  If you want to configure more, <span class="nb">set</span> NumCPUs in your torrc
+Sep <span class="m">29</span> 13:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Opening Socks listener on 127.0.0.1:9050
+Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv4 file //share/tor/geoip.
+Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv6 file //share/tor/geoip6.
+Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 0%: Starting
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 5%: Connecting to directory server
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 10%: Finishing handshake with directory server
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 15%: Establishing an encrypted directory connection
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 20%: Asking <span class="k">for</span> networkstatus consensus
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 25%: Loading networkstatus consensus
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 40%: Loading authority key certs
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 45%: Asking <span class="k">for</span> relay descriptors
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have 0/7187, and can only build 0% of likely paths. <span class="o">(</span>We have 0% of guards bw, 0% of midpoint bw, and 0% of <span class="nb">exit</span> <span class="nv">bw</span> <span class="o">=</span> 0% of path bw.<span class="o">)</span>
+Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 50%: Loading relay descriptors
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 56%: Loading relay descriptors
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 62%: Loading relay descriptors
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 67%: Loading relay descriptors
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 75%: Loading relay descriptors
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 80%: Connecting to the Tor network
+Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 90%: Establishing a Tor circuit
+Sep <span class="m">29</span> 13:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Tor has successfully opened a circuit. Looks like client functionality is working.
+Sep <span class="m">29</span> 13:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 100%: Done
+</pre></div>
+
+
+<p>Grab the .onion address:</p>
+<div class="codehilite"><pre><span></span>$ oc <span class="nb">exec</span> tor-7-buxlt cat /data/tor/hidden_service/hostname
+siojz6ucairjccsu.onion
+</pre></div>
+
+
+<p>Test it in tor-browser :)</p>
+<p><img alt="reachable .onion" src="https://lut.im/73gqgqMrYC/wzxwOJThzR0Jw1WQ" /></p>
+<p>This address will disapear as soon as the pod is deleted.
+If you want to be able to reuse the same .onion address over and over across pod creations, you'll need to store it somewhere (mount secrets inside pods, or add persistent volume).</p>
+<p><a id='toc-id-4' /></p>
+<h3>Tor Configuration</h3>
+<p>If you're happy with the torrc generated from the <a href="https://github.com/fridim/onionshift/blob/master/torrc.template">template</a>, you can skip this section.</p>
+<p>There is a lot of options to control the tor daemon. <span id='configmap'></span>You will find a complete example of torrc <a href="https://gitweb.torproject.org/tor.git/plain/src/config/torrc.sample.in">here</a>.</p>
+<p>Regarding how to put it inside pods, if you take the example of postgresql image for Openshift, the configuration is generated at runtime from env variables :</p>
+<ul>
+<li><a href="https://github.com/sclorg/postgresql-container/blob/master/9.5/root/usr/bin/run-postgresql">postgresql-container/Dockerfile · sclorg/postgresql-container · GitHub</a></li>
+</ul>
+<p>I'm not going to add every option avaible in torrc as an env variable. I only added a few to be able to quickly expose any service to tor with one command, but that's it.</p>
+<p>A simpler way is to use configMap and mount it to <code>/etc/tor/torrc</code>.</p>
+<p><a id='toc-id-5' /></p>
+<h4>configMap</h4>
+<blockquote>
+<p>Many applications require configuration via some combination of config files, command line arguments, and environment variables. These configuration artifacts should be decoupled from image content in order to keep containerized applications portable. The ConfigMap API resource provides mechanisms to inject containers with configuration data while keeping containers agnostic of Kubernetes. ConfigMap can be used to store fine-grained information like individual properties or coarse-grained information like entire config files or JSON blobs.</p>
+</blockquote>
+<p>So first create a torrc configuration file. We'll use the app service name for the <code>hiddenServicePort</code> value :</p>
+<div class="codehilite"><pre><span></span><span class="c1">### /etc/torrc ###</span>
+<span class="c1"># https://www.torproject.org/docs/tor-manual.html.en</span>
+<span class="c1"># CONFIGURE THIS BEFORE RUNNING TOR!</span>
+DataDirectory /data/tor
+
+HiddenServiceDir /data/tor/hidden_service/
+HiddenServicePort <span class="m">80</span> ruby-ex:8080
+</pre></div>
+
+
+<p>Add this file to the project as a configMap:</p>
+<div class="codehilite"><pre><span></span>oc create configmap torrc \
+--from-file=torrc
+</pre></div>
+
+
+<p>Check if it's OK, mine looks like this:</p>
+<div class="codehilite"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">fridim@master onionshift</span><span class="p p-Indicator">]</span><span class="l l-Scalar l-Scalar-Plain">$ oc get configmap -o yaml</span>
+<span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="l l-Scalar l-Scalar-Plain">items</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+  <span class="l l-Scalar l-Scalar-Plain">data</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">torrc</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">### /etc/torrc ###</span>
+      <span class="no"># https://www.torproject.org/docs/tor-manual.html.en</span>
+
+      <span class="no"># CONFIGURE THIS BEFORE RUNNING TOR!</span>
+
+      <span class="no">DataDirectory /data/tor</span>
+
+      <span class="no">HiddenServiceDir /data/tor/hidden_service/</span>
+      <span class="no">HiddenServicePort 80 ruby-ex:8080</span>
+  <span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+  <span class="l l-Scalar l-Scalar-Plain">metadata</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">creationTimestamp</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2016-09-22T16:10:50Z</span>
+    <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">torrc</span>
+    <span class="l l-Scalar l-Scalar-Plain">namespace</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">tor-hidden-service</span>
+    <span class="l l-Scalar l-Scalar-Plain">resourceVersion</span><span class="p p-Indicator">:</span> <span class="s">&quot;1419464&quot;</span>
+    <span class="l l-Scalar l-Scalar-Plain">selfLink</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/api/v1/namespaces/tor-hidden-service/configmaps/torrc</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2129fb99-80df-11e6-a17e-ac162d7c2550</span>
+<span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">List</span>
+<span class="l l-Scalar l-Scalar-Plain">metadata</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
+</pre></div>
+
+
+<p>Then add a volume from this configMap :</p>
+<div class="codehilite"><pre><span></span>oc volume dc/onionshift --add --type=configMap --configmap-name=torrc -m /etc/tor
+</pre></div>
+
+
+<p>DeploymentConfig update triggers re-deployment and creates a new pod with the new torrc conf.</p>
+<p><a id='toc-id-6' /></p>
+<h3>Persistent .onion</h3>
+<p>Before you setup onionbalance, let's have persistent .onion address, aka keep the same private_key of your hidden service accross pod creations.</p>
+<p>The first time you run tor it creates hidden_service directory and generates private_key.</p>
+<p>Backup the private_key and hostname using rsync:</p>
+<div class="codehilite"><pre><span></span>fridim@master ~<span class="o">]</span>$ mkdir hidden_service
+<span class="o">[</span>fridim@master ~<span class="o">]</span>$ oc rsync onionshift-21-eqsrq:/data/tor/hidden_service/ hidden_service/
+receiving incremental file list
+./
+hostname
+private_key
+
+sent <span class="m">68</span> bytes  received <span class="m">1074</span> bytes  761.33 bytes/sec
+total size is <span class="m">910</span>  speedup is 0.80
+</pre></div>
+
+
+<p>Create a secret with the private key :</p>
+<div class="codehilite"><pre><span></span><span class="o">[</span>fridim@master hidden_service<span class="o">]</span>$ oc create secret generic privatekey --from-file<span class="o">=</span><span class="nv">privatekey</span><span class="o">=</span>./private_key
+secret <span class="s2">&quot;privatekey&quot;</span> created
+</pre></div>
+
+
+<p>(You need to specify the secret name as you can't have underscore in the name)</p>
+<p>Now mount this private_key to be used at runtime. We cannot mount it directly to the final destination <code>/data/tor/hidden_service/private_key</code> because it would have root ownership when tor is run as a user and will then complain that ownership is not correct. To bypass this, <a href="https://github.com/fridim/onionshift/blob/master/tor-entrypoint.sh">tor-entrypoint.sh</a> imports the key found in <code>/data/import</code> into <code>/data/tor/hidden_service/private_key</code>.</p>
+<p>So mount the privatekey secret into <code>/data/import</code> :</p>
+<div class="codehilite"><pre><span></span><span class="n">oc</span> <span class="n">volume</span> <span class="n">dc</span><span class="o">/</span><span class="n">onionshift</span> <span class="o">--</span><span class="n">add</span> <span class="o">--</span><span class="n">mount</span><span class="o">-</span><span class="n">path</span><span class="o">=/</span><span class="n">data</span><span class="o">/</span><span class="kn">import</span> <span class="o">--</span><span class="n">secret</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">privatekey</span>
+</pre></div>
+
+
+<p><a href="https://github.com/fridim/onionshift/blob/master/tor-entrypoint.sh">tor-entrypoint.sh</a> will move the key to <code>/data/tor/hidden_service/private_key</code> so you can let the filename in import/ be the secret name (you don't need to edit the deployment config to set <code>.secret.items[].path</code> to <code>private_key</code>).</p>
+<p>There you go, .onion address will last across pod deletion/creation.</p>
+<p>You can scale UP the pod number of replicas, tor daemons will share the same key and clients will be dispatched randomly to tor instances (not equally, see this <a href="https://www.benthamsgaze.org/wp-content/uploads/2015/11/sucu-torscaling.pdf">paper</a>).</p>
+<div class="codehilite"><pre><span></span>oc scale --replicas=2 dc onionshift
+</pre></div>
+
+
+<p>You can go up to 6 I think.</p>
+<p><a id='toc-id-7' /></p>
+<h2>Scalability with onionbalance</h2>
+<p><a id='toc-id-8' /></p>
+<h3>Create more tor instances</h3>
+<p>For now we have one persistent .onion with several tor instances registering to HSDir at different moments, so clients are load-balanced to those pods.</p>
+<p>Let's create another bunch of tor pod with another key in order to use onionbalance. For that, just  edit the current deploymentConfig</p>
+<div class="codehilite"><pre><span></span>oc edit dc
+</pre></div>
+
+
+<ul>
+<li>Duplicate the section of onionshift.</li>
+<li>Rename the pod and deploymenconfig.</li>
+<li>Remove the volumes as we didn't create the privatekey yet.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><span class="nn">---</span>
+<span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">DeploymentConfig</span>
+<span class="l l-Scalar l-Scalar-Plain">metadata</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">annotations</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">openshift.io/generated-by</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">OpenShiftNewApp</span>
+  <span class="l l-Scalar l-Scalar-Plain">labels</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">app</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
+  <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
+<span class="l l-Scalar l-Scalar-Plain">spec</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">strategy</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Rolling</span>
+  <span class="l l-Scalar l-Scalar-Plain">replicas</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+  <span class="l l-Scalar l-Scalar-Plain">selector</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">app</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
+    <span class="l l-Scalar l-Scalar-Plain">deploymentconfig</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
+  <span class="l l-Scalar l-Scalar-Plain">template</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">metadata</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">annotations</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">openshift.io/generated-by</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Hand</span>
+      <span class="l l-Scalar l-Scalar-Plain">creationTimestamp</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
+      <span class="l l-Scalar l-Scalar-Plain">labels</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">app</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
+        <span class="l l-Scalar l-Scalar-Plain">deploymentconfig</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
+    <span class="l l-Scalar l-Scalar-Plain">spec</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">containers</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">env</span><span class="p p-Indicator">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">SERVICE_NAME</span>
+          <span class="l l-Scalar l-Scalar-Plain">value</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ruby-ex</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">SERVICE_PORT</span>
+          <span class="l l-Scalar l-Scalar-Plain">value</span><span class="p p-Indicator">:</span> <span class="s">&quot;8080&quot;</span>
+        <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
+        <span class="l l-Scalar l-Scalar-Plain">imagePullPolicy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
+        <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
+        <span class="l l-Scalar l-Scalar-Plain">terminationMessagePath</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/termination-log</span>
+        <span class="l l-Scalar l-Scalar-Plain">volumeMounts</span><span class="p p-Indicator">:</span>
+        <span class="c1">#- mountPath: /data/import</span>
+        <span class="c1">#  name: volume-eg9ol</span>
+      <span class="l l-Scalar l-Scalar-Plain">dnsPolicy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterFirst</span>
+      <span class="l l-Scalar l-Scalar-Plain">restartPolicy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
+      <span class="l l-Scalar l-Scalar-Plain">securityContext</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
+      <span class="l l-Scalar l-Scalar-Plain">terminationGracePeriodSeconds</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
+      <span class="l l-Scalar l-Scalar-Plain">volumes</span><span class="p p-Indicator">:</span>
+      <span class="c1">#- name: volume-eg9ol</span>
+        <span class="c1">#secret:</span>
+          <span class="c1">#secretName: privatekey</span>
+  <span class="l l-Scalar l-Scalar-Plain">triggers</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ConfigChange</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">imageChangeParams</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">automatic</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="l l-Scalar l-Scalar-Plain">containerNames</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
+      <span class="l l-Scalar l-Scalar-Plain">from</span><span class="p p-Indicator">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">kind</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span>
+        <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
+    <span class="l l-Scalar l-Scalar-Plain">type</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageChange</span>
+</pre></div>
+
+
+<p>rsync the key of one of the pod :</p>
+<div class="codehilite"><pre><span></span>oc rsync onionshift2-1-l2676://data/tor/hidden_service/ hidden_service/
+receiving incremental file list
+hostname
+private_key
+
+sent 79 bytes  received 1071 bytes  766.67 bytes/sec
+total size is 910  speedup is 0.79
+[fridim@master ~]$ cd hidden_service/
+[fridim@master hidden_service]$ oc create secret generic privatekey2 --from-file=privatekey=./private_key
+secret &quot;privatekey2&quot; created
+</pre></div>
+
+
+<p>Mount the secret in /data/import :</p>
+<div class="codehilite"><pre><span></span><span class="n">oc</span> <span class="n">volume</span> <span class="n">dc</span><span class="o">/</span><span class="n">onionshift2</span> <span class="o">--</span><span class="n">add</span> <span class="o">--</span><span class="n">mount</span><span class="o">-</span><span class="n">path</span><span class="o">=/</span><span class="n">data</span><span class="o">/</span><span class="kn">import</span> <span class="o">--</span><span class="n">secret</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">privatekey2</span>
+</pre></div>
+
+
+<p><a id='toc-id-9' /></p>
+<h3>configure onionbalance daemon</h3>
+<p>So now we have different .onion and different tor instances each one with its own private_key. Let's see how we can setup a load-balanced .onion.</p>
+<p>2 components :</p>
+<ul>
+<li>tor with ControlPort and CookieAuthentication</li>
+<li>onionbalance</li>
+</ul>
+<p>This time, the <a href="http://onionbalance.readthedocs.io/en/latest/getting-started.html">configuration</a> is:</p>
+<div class="codehilite"><pre><span></span>DataDirectory /data/tor
+
+ControlPort 9051
+CookieAuthentication 1
+CookieAuthFile /data/shared/control_auth_cookie
+SocksPort 0
+</pre></div>
+
+
+<div class='warning'>
+Do not keep this option from the onionbalance documentation :
+
+    <code>RunAsDaemon 1</code>
+
+Otherwise the container will exit as soon as tor tries to daemonize.
+</div>
+
+<p><code>CookieAuthFile /data/shared/control_auth_cookie</code> is to place the shared cookie in a shared volume (<strong>emptyDir</strong>) between containers of the pod. We cannot just mount emptyDir volume to <code>/data/tor</code> directly because ownership would then be root:USER and tor does not allow uid of file to be different from the user running tor. For information why permission and ownership are handled the way they are in emptyDir: see <a href="https://github.com/kubernetes/kubernetes/issues/2630">this kubernetes issue</a>.</p>
+<p>Create a configMap from this configuration :</p>
+<div class="codehilite"><pre><span></span>oc create configmap torrc-balance --from-file torrc-balance
+</pre></div>
+
+
+<p><a id='toc-id-10' /></p>
+<h4>Generate master private_key</h4>
+<p>The only hidden service private_key we'll need to keep is actually the one from the master. All other tor hidden_service that are load-balanced by this one can be ephemeral and can be changed in onionbalance <code>master.conf</code>.</p>
+<p>If you have access to docker:</p>
+<div class="codehilite"><pre><span></span>git clone https://github.com/fridim/onionshift
+<span class="nb">cd</span> onionshift
+docker build -t fridim/onionshift .
+docker run fridim/onionshift /bin/sh -c <span class="s1">&#39;cd /tmp &amp;&amp; /usr/bin/onionbalance-config -n 0 &amp;&amp; ls config/master/*key &amp;&amp; cat config/master/*key&#39;</span>
+</pre></div>
+
+
+<p>This will output a new RSA key and its .onion associated, to use with the tor instance and onionbalance.</p>
+<p>If you do not need to know the .onion yet, you can simply run:</p>
+<div class="codehilite"><pre><span></span>openssl genrsa 1024 &gt; private.key
+</pre></div>
+
+
+<p>Save the key and create the secret, ex :</p>
+<div class="codehilite"><pre><span></span>oc create secret generic bl2eo4cvuyrcd47v.key --from-file=./bl2eo4cvuyrcd47v.key
+</pre></div>
+
+
+<p>List the .onion to be load-balanced, for example :</p>
+<div class="codehilite"><pre><span></span>$ oc get pods --selector<span class="o">=</span><span class="nv">app</span><span class="o">=</span>onionshift --no-headers<span class="o">=</span><span class="nb">true</span> <span class="p">|</span>cut -f1 -d<span class="s1">&#39; &#39;</span><span class="p">|</span>xargs -n1 -I<span class="o">{}</span> oc <span class="nb">exec</span> <span class="o">{}</span> cat /data/tor/hidden_service/hostname
+jwe3ybar7layfbhc.onion
+akz77e4fe6c5iwbf.onion
+</pre></div>
+
+
+<p>(you may need to adapt this depending on your names, labels, ...)</p>
+<p>create onionbalance config.yaml :</p>
+<div class="codehilite"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">TOR_ADDRESS</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+<span class="l l-Scalar l-Scalar-Plain">TOR_PORT</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">9051</span>
+<span class="l l-Scalar l-Scalar-Plain">STATUS_SOCKET_LOCATION</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/onionbalance/control</span>
+<span class="l l-Scalar l-Scalar-Plain">services</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">instances</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">jwe3ybar7layfbhc.onion</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">akz77e4fe6c5iwbf.onion</span>
+  <span class="l l-Scalar l-Scalar-Plain">key</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.key</span>
+</pre></div>
+
+
+<p>Create the configmap from it :</p>
+<div class="codehilite"><pre><span></span>oc create configmap bl2eo4cvuyrcd47v.conf --from-file=./bl2eo4cvuyrcd47v.conf
+</pre></div>
+
+
+<p>This configmap will have to be updated everytime you want to add or remove a .onion backend.</p>
+<p>Since we need a tor daemon AND an onionbalance daemon, we'll need 2 containers for this pod.</p>
+<p>Let's create a new pod for those 2 :</p>
+<p>...</p>
+<div class='warning'>I create one imageChange  trigger for each container because when i tried with one imageChange that has 2 containers in <code>containerNames</code> it was not updating the image properly. I don't know why the containerNames array is not iterated over. I asked on openshift mailing list for information, i'll update this post.</div>
+
+<p><a id='toc-id-11' /></p>
+<h4>onionbalance status socket</h4>
+<p>onionbalance create a status socket, if you want to check its content :</p>
+<div class="codehilite"><pre><span></span>oc rsh -c onionbalance onionbalance-..
+/ $ socat - unix-connect:/data/onionbalance/control
+bl2eo4cvuyrcd47v.onion 2016-10-03 15:15:17
+  hbvlni32fc32v7zw.onion 2016-10-03 15:00:00 3 IPs
+  6bztlzyrm7lhzy2g.onion [offline]
+</pre></div>
+
+
+<p>This was a sec after starting. After a while :</p>
+<div class="codehilite"><pre><span></span>/ $  socat - unix-connect:/data/onionbalance/control
+bl2eo4cvuyrcd47v.onion 2016-10-03 15:15:17
+  hbvlni32fc32v7zw.onion 2016-10-03 15:00:00 3 IPs
+  6bztlzyrm7lhzy2g.onion 2016-10-03 15:00:00 3 IPs
+</pre></div>
+
+
+<p>To simply see the logs when a pod has several containers, you need to add the <code>-c CONTAINER</code> option. Example:</p>
+<div class="codehilite"><pre><span></span>[fridim@master hidden_service]$ oc logs -c onionbalance onionbalance-25-28vs3
++ TIMEOUT=500
++ cd /data
++ mkdir -p onionbalance tor
++ &#39;[&#39; -d import-key &#39;]&#39;
++ cp import-key/bl2eo4cvuyrcd47v.key onionbalance/
++ cp import-conf/config.yaml onionbalance/
++ &#39;[&#39; -d /data/shared &#39;]&#39;
++ export -f wait_and_copy_cookie
++ timeout -t 500 bash -c wait_and_copy_cookie
++ cd /data/onionbalance
++ /usr/bin/onionbalance -c config.yaml
+2016-10-03 15:14:26,947 [INFO]: Loaded the config file &#39;/data/onionbalance/config.yaml&#39;.
+2016-10-03 15:14:26,958 [INFO]: Loaded 2 instances for service bl2eo4cvuyrcd47v.onion.
+2016-10-03 15:14:26,960 [INFO]: Initiating fetch of descriptors for all service instances.
+2016-10-03 15:14:32,247 [INFO]: The introduction point set has changed for instance hbvlni32fc32v7zw.onion.
+2016-10-03 15:15:17,013 [INFO]: No descriptor received for instance 6bztlzyrm7lhzy2g.onion yet.
+2016-10-03 15:15:17,179 [INFO]: Published a descriptor for service bl2eo4cvuyrcd47v.onion under replica 0.
+2016-10-03 15:15:17,364 [INFO]: Published a descriptor for service bl2eo4cvuyrcd47v.onion under replica 1.
+2016-10-03 15:16:32,080 [INFO]: The introduction point set has changed for instance 6bztlzyrm7lhzy2g.onion.
+2016-10-03 15:20:18,328 [INFO]: Published a descriptor for service bl2eo4cvuyrcd47v.onion under replica 0.
+2016-10-03 15:20:18,979 [INFO]: Published a descriptor for service bl2eo4cvuyrcd47v.onion under replica 1.
+</pre></div>
+
+
+<p><a id='toc-id-12' /></p>
+<h3>scale up onionbalance</h3>
+<p>Just run :</p>
+<div class="codehilite"><pre><span></span>oc scale --replicas=2 dc onionbalance
+</pre></div>
+
+
+<p>Or use the web console:</p>
+<p><img alt="scaling" src="../images/201610031753_scaling.png" /></p>
+<p><a id='toc-id-13' /></p>
+<h2>Templates</h2>
+<p><span id="tldr2"></span>To resume all the previous steps in an handy way, i created two templates to easily deploy onionshift or onionbalance.</p>
+<p><a id='toc-id-14' /></p>
+<h3>onionshift</h3>
+<p>add the template to your namespace:</p>
+<div class="codehilite"><pre><span></span>oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionshift.yaml
+</pre></div>
+
+
+<p>Then use command line <code>oc</code> to process the template or web console :</p>
+<p><img alt="template1" src="../images/201610041357_template1.png" /></p>
+<p><img alt="template onionshift" src="../images/201610041404_onionshift_template.png" /></p>
+<p><a id='toc-id-15' /></p>
+<h3>onionbalance</h3>
+<p>Input is :</p>
+<ul>
+<li>private key</li>
+<li>list of .onion to loadbalance</li>
+</ul>
+<p>It will create secret, deploymentconfig, configmap, buildconfig, imagestream, etc, for you. Just import it to your project:</p>
+<div class="codehilite"><pre><span></span>oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionbalance.yaml
+</pre></div>
+
+
+<p>You can process it and run it from the command-line with <code>oc</code> or from the webconsole :</p>
+<p><img alt="tempalte2" src="../images/201610041309_template2.png" /></p>
+<p><a id='toc-id-16' /></p>
+<h2>Monitor tor daemon with arm</h2>
+<p><a href="https://www.atagar.com/arm/">arm</a> is installed in the image. Just add the ControlPort in your torrc if you want to use it. Then, something like :</p>
+<div class="codehilite"><pre><span></span>$ oc rsh onionshift-...
+<span class="nb">cd</span> /data/
+<span class="nb">echo</span> <span class="s2">&quot;ControlPort 9051&quot;</span> &gt;&gt; torrc
+pkill -sighup tor
+<span class="nv">HOME</span><span class="o">=</span>/data arm
+</pre></div>
+
+
+<p>Should do the trick and get you info about. I don't have traffic at all but here an example:</p>
+<p><img alt="arm" src="../images/201610040001_arm.png" /></p>
+<p><a id='toc-id-17' /></p>
+<h1>Links</h1>
+<ul>
+<li><a href="https://github.com/fridim/onionshift">https://github.com/fridim/onionshift</a></li>
+<li><a href="https://blog.torproject.org/blog/hidden-services-need-some-love">Hidden Services need some love | The Tor Blog</a>    Original post rising the scalability issues</li>
+<li><a href="https://blog.torproject.org/blog/cooking-onions-finding-onionbalance">Cooking with Onions</a></li>
+<li><a href="https://www.benthamsgaze.org/wp-content/uploads/2015/11/sucu-torscaling.pdf">tor hidden service scaling</a>   Nice paper</li>
+<li><a href="http://onionbalance.readthedocs.io/en/latest/index.html">onionbalance documentation</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/2630">Volumes are created in container with root ownership and strict permissions</a>.</li>
+</ul>
+<p><a id='toc-id-18' /></p>
+<h1>Ideas and TODOs</h1>
+<p>Please consider this whole post as work in progress:</p>
+<ul>
+<li><del>Add a TL;DR for how to quickly add .onion for your app (in a nutshell)</del></li>
+<li>find out a more dynamic way to add/remove backend in onionbalance</li>
+<li>add livenessprobe check</li>
+<li>would it be possible to implement this as a route in Openshift?</li>
+<li><del>write a template</del></li>
+<li><del>add</del> <a href="https://www.atagar.com/arm/">arm</a> <del>to the image, to be able to see what's happening at the tor level</del></li>
+<li>add a section about  HiddenServiceAuthorizeClient  to allow your hidden service only to specific users</li>
+<li><del>tor-entrypoint.sh : import private_key if present in /data</del></li>
+<li><del>tor-alpine: rename project and add a proper README.md</del></li>
+<li>create another Dockerfile (repository?) for onionbalance</li>
+</ul><div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'fridim'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        </div>
+<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/tor_hidden_service_on_openshift_3.draft.md">notes/tor_hidden_service_on_openshift_3.draft.md</a>&nbsp;(<a href="../notes/tor_hidden_service_on_openshift_3.draft.md.asc">GPG sig</a>)&nbsp;Tue&nbsp;Oct&nbsp;&nbsp;4&nbsp;15:32:23&nbsp;CEST&nbsp;2016&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+</body></html>

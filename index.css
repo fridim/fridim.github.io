@@ -1,0 +1,146 @@
+/*
+Primary Color:
+0A64A4		24577B		03406A		3E94D1		65A5D1
+Complementary Color:
+FF9000		BF8130		A65E00		FFAC40		FFC273
+ */
+body {
+  font-family: serif;
+  margin: 0 25% 10px 25%;
+  line-height: 1.42857143;
+}
+
+@media (max-width: 623px) {
+    body {
+        font-size: 8px;
+        margin: 0 0% 10px 0%;
+    }
+}
+
+hr {
+  background:#eee none repeat scroll 0 0;
+  border:0 none;
+  height:1px;
+  clear: both;
+}
+
+h1,  h2,  h3,  h4,  h5 {
+  font-family:"Palatino Linotype", "Book Antiqua", Palatino, sans-serif;
+  text-shadow: 1px 1px 1px #ccc;
+  margin-bottom:5px;
+  font-weight: normal;
+}
+
+dl {
+  background-color:#0772a1;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-image: url(/images/dl.png);
+  background-origin: padding-box;
+  background-repeat: both;
+  padding:10px;
+  color: white;
+  border: 3px solid #63afd0;
+}
+dd {
+  font-size:85%;
+  font-style:italic;
+}
+/*
+Primary Color:
+0A64A4          24577B          03406A          3E94D1          65A5D1
+Complementary Color:
+FF9000          BF8130          A65E00          FFAC40          FFC273
+ */
+
+code,
+pre,
+{
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+a code {
+  text-decoration: none;
+}
+
+code {
+  padding: 2px 4px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+pre code {
+  background-color: inherit;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+
+pre {
+  margin-left: 30px;
+  margin-right: 30px;
+  padding:10px;
+  border: 3px solid #eee;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  overflow:auto;
+  color: #404040;
+}
+
+div.quote {
+  margin-left : 20px;
+  padding-left : 10px;
+  font-style:italic;
+  border-left: 4px solid #ddd;
+  background-color:#0772a1;
+}
+
+div#footer {
+  font-size: 80%;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+div#footer a {
+  color: inherit;
+}
+
+blockquote {
+  padding-left: 10px;
+  border-left: 3px dotted #ccc;
+  font-style:italic;
+  font-family: sans-serif;
+}
+
+img {
+  max-width: 100%;
+}
+
+div.warning {
+
+    color: #580000;
+    font-family: sans-serif;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #eeeeee;
+    border-left: 4px solid orange;
+ /*   background-color: #FFF3F3; */
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+div.warning pre { border: none; }
+div.warning::before {
+    content: "Warning ";
+    display: block;
+    color: orange;
+    font-size: 140%;
+}
+
+div.twitter {
+    float: right;
+    margin-right: -25%;
+    margin-left: 30px;
+}

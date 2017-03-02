@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Guillaume Coré (fridim) - personal page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="StyleSheet" rev="StyleSheet" href="/pygments.css" type="text/css" />
+  <!-- <link rel="StyleSheet" rev="StyleSheet" href="/bootstrap.min.css" type="text/css" /> -->
+  <link rel="StyleSheet" rev="StyleSheet" href="/index.css" type="text/css" />
+
+</head>
+
+<body>
+<h2>Create an OpenBSD live USB stick</h2>
+<p><small>2014-06-25 by fridim ~ #openbsd #gpg #kvm #qemu</small></p>
+<p>The beginning of the article
+<a href="http://blog.josefsson.org/2014/06/23/offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard/">offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard</a>
+deals with the creation of a master GPG key on an <strong>offline</strong> computer. The
+author uses a Debian Live CD for that task.</p>
+<p>I thought : Why not boot a tiny OpenBSD instead ?</p>
+<p>I <a href="http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/amd64/">looked</a> for one on the
+official website: there is only the installation image.  I found
+<a href="http://livecd-openbsd.sourceforge.net/">livecd-openbsd</a> and
+<a href="http://liveusb-openbsd.sourceforge.net/">liveusb-openbsd</a>, but I don't trust
+them. So here is a way to create one puffy USB stick.</p>
+<p>Dependency : <code>qemu</code></p>
+<div class="codehilite"><pre><span></span>wget http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/amd64/install55.iso
+sha256sum install55.iso <span class="c1"># should be cc465ce3f8397883e91c6e1a8a98b1b3507a338984bbfe8978050c5f8fdcaf3f</span>
+qemu-img create liveusb.img 825000k <span class="c1"># you may need more space if you want X</span>
+qemu-system-x86_64 -hda liveusb.img -m <span class="m">1024</span> -cdrom install55.iso <span class="c1"># perform install</span>
+</pre></div>
+
+
+<p>Once installation is done, you may want to add additional packages. Inside the VM:</p>
+<div class="codehilite"><pre><span></span>reboot
+<span class="nb">export</span> <span class="nv">PKG_PATH</span><span class="o">=</span>http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/packages/amd64/
+pkg_add gnupg <span class="c1"># for example</span>
+shutdown -h now
+</pre></div>
+
+
+<p>From the Linux again:</p>
+<div class="codehilite"><pre><span></span>dd <span class="k">if</span><span class="o">=</span>liveusb.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>512k <span class="p">;</span> sync <span class="c1"># replace /dev/sdc with your usb stick device</span>
+qemu-system-x86_64 -usb -hda /dev/sdc  <span class="c1"># test to see if it boot</span>
+</pre></div>
+
+
+<p>It's ready!</p><div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//fridim.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/livebsd.md">notes/livebsd.md</a>&nbsp;(<a href="../notes/livebsd.md.asc">GPG sig</a>)&nbsp;Tue&nbsp;Oct&nbsp;&nbsp;4&nbsp;21:10:52&nbsp;CEST&nbsp;2016&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+</body></html>

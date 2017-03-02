@@ -1,0 +1,77 @@
+==================================================================
+https://keybase.io/fridim
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://onfi.re
+  * I am fridim (https://keybase.io/fridim) on keybase.
+  * I have a public key with fingerprint D79D FF62 9E08 1E21 1181  A3C3 0A74 F4B1 A990 3389
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "d79dff629e081e211181a3c30a74f4b1a9903389",
+            "host": "keybase.io",
+            "key_id": "0a74f4b1a9903389",
+            "kid": "0101024908de0094b2ba7b03d20e6cfc2bbca4bbfb936778d8ca760fcbbd37defc9d0a",
+            "uid": "8fe3fc7c7c30861fa81144b8be38b100",
+            "username": "fridim"
+        },
+        "service": {
+            "hostname": "onfi.re",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1432373080,
+    "expire_in": 157680000,
+    "prev": "010af7b60000712ca5819fe57e1b65265d5fc2e0ec9fdba62294f6d03fc5001c",
+    "seqno": 8,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+owNCWmg2MUFZJlNZCI3WpAABnn///////f3f///n/9/9//////97///f/b95/Pv7
+/9//f/bAArOrjuxzgFVT1PUMm1HqaZGNTaepPUaemU2o2o00zU9TQxHlM1GR6Qya
+eppp6CZNPJNNqPJNHqaG1G1BkbUb1R6hptRsmo8UNPSbUxGmh6mMhGh6j9KYnptK
+H5KFU9IRHqPEZJpkxoCZG1BgRjSbSYmmGk9TGSPRqGTA0IYZGSY1GNJkxoaATExG
+BGmQA02o09E09DRoCYJoyeUwEU0Ap+ImRqYp+Qk9R6jQMQA0NAaAZDQGhkNDCAZA
+DNRoGhoAAYgGjQAADIADCaAABpoHqEVT/SGUp+TSmJptENGBqaGRpiYjTEaMRpgE
+0GCGjE0YEYIYQHqBggZGJoZMIDTEyDTIMgwmQNMmRiAAwcNRcwB0nGcBd+N/+stI
+vdBrY31u4/F0SMU3vmtT8biYj4UHAWLUtChn8OrDNal6VdUp7AcXJ2MZVnYnnS8V
+JiZzBMtJKNjrhZBIME0nQ9M+arB9+rTFSElUBo0iRogHcAWpCHMUUBCFEKIFPPOG
+wYN2pEhCEIJCCIgAiuAKFIRkppc9p+vNt+9Hsi0v2VcAUHijAQCzoRBX7MxvYUx5
+9lsWFURB8gkQgnQgERl+CvFEpGIE2yeMJ5TzjGZTIrcdJFcKmoelhBE4CgiY5Er2
+qKeqMulP7hLgoLLYqvXPDVFByVZsC0aiBv1VBLfhDDTKB2dl53qQl3SjYmJPceR2
+2epNz3DnwJFR6TVLGJkMiFhrRKBGATTTsT41I9yeCIegTBVELL1nzsPlYQfjTaWD
+psKHmrz0Lez9O3cGGByxAFaIz1RmC3ktrnn3p+SDx3BlzU+jXL3atz4zOAuuQDlU
+u1Q73sGvOT1bRhdFBR7v6nZ72mOUegcGDO9TVAR3/zxrD6xcyWUKXvzxCAJh5Tgh
+DDCAaLAIIbGAGIiIBoUZtR7TjrzSxsUIPEIEom3Q4nCK4DF3o0hALJmmiBT+plGh
+EBj77BUnEDEJFUlgSJV5lQ5eGI9VoLtBDGiZOtL0borLCwQBjwpwyBP6k0EXWOMf
+gQUsqqq08B+sw0Juy2Cg0Zyov0+k4SZkvD8ZkHdn8bTxvbEGjho9pKBq/FWcWBvm
+ADiWpmraZAHFoSFa8sxJoICFcKMZozmhRmUj16GBMuldkDxW/rQ3uCzNSbM0CYRA
+MnNKTCsFVmA4qtYgrIgwq0irMEiAq10iYeJb1UUOIbzi2iCTXcy8CgzAsFj9tmTl
+yANmEIQFdR5tUQxy5UZtYN20Gtch1SYkl3if+NX0T+KAS237nmslN6DwbiSwyaEC
+2dd0mKAMnPm0uUKhk7xfJKwqvnsCkww+HGZomoRfOHvTbfkaeaVgXIz8ZlLMmuMb
+kk+5iTWNv0jM5YdCNSxtdAMtPFL/2IWKJJ29xLhZ5bIRQ6yNeN4eBdrDgpyVUwB/
+UtuJxZN7V6gunHe0Pr69unsKw5F2bG+RLqLpTQbz/ONA8GF75LhpmZEHkRwW+iyU
+fa+KVUgej5EpXyzt+4uiBa8EbulScDXEf9ylQHJYc8++9A92Mb7xiMUhqD4w/CXY
+LEKBSN1VP6HVPfcFBmVBV9zkubW/bRP3GkDr4f/i7kinChIBEbrUgA==
+=xM78
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/fridim
+
+==================================================================
+
