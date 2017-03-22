@@ -8,7 +8,7 @@ Index:
 
 ---
 
-Il y a beaucoup d'articles traitant déjà ces sujets : création de clef GPG, configuration d'une Yubikey, etc. Cette page «compilation» contient mes notes des différentes étapes par lesquelles je suis passé pour générer une [nouvelle](/files/transition_statement_2015-05-23.asc) clef GPG. [Liens](#liens) à la fin.
+Il y a beaucoup d'articles traitant déjà ces sujets : création de clef GPG, configuration d'une Yubikey, etc. Cette page «compilation» contient mes notes des différentes étapes par lesquelles je suis passé pour générer une [nouvelle](/files/transition_statement_2015-05-23.clearsigned.txt) clef GPG. [Liens](#liens) à la fin.
 
 
 **Objectif** : créer une nouvelle masterkey et ses subkeys. La masterkey restera *offline*. Les subkeys servent à l'usage de tous les jours pour signer ou déchiffrer des messages.
