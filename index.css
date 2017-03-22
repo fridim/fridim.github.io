@@ -87,6 +87,7 @@ pre {
   -moz-border-radius: 10px;
   overflow:auto;
   color: #404040;
+  background: #f8f8f8;
 }
 
 div.quote {
