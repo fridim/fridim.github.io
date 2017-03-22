@@ -13,7 +13,7 @@ Contact
 -------
 
 * my GnuPG [public key <code>0x0A74F4B1A9903389</code>](/files/0x0A74F4B1A9903389.asc)
-* my [OTR fingerprints](/files/otr.txt.asc)
+* my [OTR fingerprints](/files/otr.clearsigned.txt)
 
 [![github](images/github-48x48.png)](http://github.com/fridim)
 [![twitter](images/twitter-48x48.png)](https://twitter.com/fridim)
