@@ -1,0 +1,44 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+%%sign%%
+Guillaume Coré (fridim)
+=======================
+
+Blog
+- --------
+
+* 2017-04-05 [How to mount qcow2 disk image](notes/mount_qcow2.html)
+* 2016-10-04 [Tor hidden service on Openshift 3](notes/tor_hidden_service_on_openshift_3.html)
+* 2015-05-23 [C'est l'heure de la récréation… GPG](notes/gpg_recreation.html)
+* 2014-11-26 [problème euler 60](https://gist.github.com/fridim/0250192c183256e8744f)
+* 2014-06-25 [create an OpenBSD live USB stick](notes/livebsd.html)
+
+Contact
+- -------
+
+* my GnuPG [public key <code>0x0A74F4B1A9903389</code>](files/0x0A74F4B1A9903389.asc.txt)
+* my [OTR fingerprints](files/otr.clearsigned.txt)
+
+[![github](images/github-48x48.png)](http://github.com/fridim)
+[![twitter](images/twitter-48x48.png)](https://twitter.com/fridim)
+[![linkedin](images/linkedin-48x48.png)](http://www.linkedin.com/in/guillaumecore)
+
+These days, you will also find me on IRC freenode, geeknode, idling on several channels like
+[#racket](http://en.wikipedia.org/wiki/Racket_(programming_language)).
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE2CQs0rRMirkYeGAnLJDT5Fc/2N4FAljlJVwACgkQLJDT5Fc/
+2N4FFg//cL4yX3G3Pz9c92SrEtKy9/Iu8LTzYOUx/DebhBxT8/WYemUHE7S6/gcB
+7xRGMm0k3qt4CjvxaomrmpaYoi8eQIYvRsJ6jnDk7oNHAQxcCwiXaA7Nr5282Maf
+X+NmsjpJdF8lKijn5CefoCIftqaA2U9q4Fc+WNbfWUA11KwN5Es1xx81y7RkaMo5
+Kq/oGL6FAq4k3f8mj+XI1qLUFX/rxndgOpAMSFCn3h+3PKgB7cJTK/XpEeHJD+Lk
+/LqrXHG2KZaknO88w1FvJPH4+jhHKRHzTkHjmvKRItWjdYfap0a/VR4deM0h7Nzf
+m93OSoKSHQ5rT6MeUxkyRl2JORbtYjNNrlKYTUCD40i2Ugi1ftHwuk43JBzvKm9g
+qbQmUGectL33DXWViePEd/5m7qxyg3lD8V9UXW3HONTHkyRLrXvjR0rhwpJPZ1H9
+lBc8YWHCEMEs1IMXC42spZniZNdaTA6bG5qJ4zH41Q4QHgEQ5V/Xg3HebAqI7i12
+vMT7tkJ3rHrOZbmIFCmwGLEumyk8tbaLZ99A18uoeCxG6ncGMjwOi3SOSJ91jVSA
+D9B1Zel79FUb3D0m7FBjAMrCaxFwhNih/U0KKyySnmrPDSzLKCgPJ0cYlHE/8AZT
+iI3AcJMaR1zut6AKR5ULaQLPummc3z/HjOxvVTYiZJjF9jlx+D8=
+=jngt
+-----END PGP SIGNATURE-----
