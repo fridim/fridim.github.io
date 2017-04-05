@@ -1,3 +1,4 @@
+%%sign%%
 C'est l'heure de la récréation … GPG
 ------------------------------------
 <small>2015-05-23 par fridim ~ #gpg</small>

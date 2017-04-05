@@ -101,7 +101,7 @@ with an hidden service configured pointing to your openshift service.</p>
 <p><a id='toc-id-3' /></p>
 <h3>one-line command to expose a service</h3>
 <p><span id="tldr"></span></p>
-<div class="codehilite"><pre><span></span>oc new-app https://github.com/fridim/onionshift -e <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex,SERVICE_PORT<span class="o">=</span>8080
+<div class="codehilite"><pre><span></span>oc new-app https://github.com/fridim/onionshift -e <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex,SERVICE_PORT<span class="o">=</span><span class="m">8080</span>
 </pre></div>
 
 
@@ -113,39 +113,39 @@ with an hidden service configured pointing to your openshift service.</p>
 + <span class="nb">cd</span> /data
 + <span class="nb">export</span> <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex
 + <span class="nv">SERVICE_NAME</span><span class="o">=</span>ruby-ex
-+ <span class="nb">export</span> <span class="nv">SERVICE_PORT</span><span class="o">=</span>8080
-+ <span class="nv">SERVICE_PORT</span><span class="o">=</span>8080
-+ <span class="nb">export</span> <span class="nv">HS_PORT</span><span class="o">=</span>80
-+ <span class="nv">HS_PORT</span><span class="o">=</span>80
++ <span class="nb">export</span> <span class="nv">SERVICE_PORT</span><span class="o">=</span><span class="m">8080</span>
++ <span class="nv">SERVICE_PORT</span><span class="o">=</span><span class="m">8080</span>
++ <span class="nb">export</span> <span class="nv">HS_PORT</span><span class="o">=</span><span class="m">80</span>
++ <span class="nv">HS_PORT</span><span class="o">=</span><span class="m">80</span>
 + <span class="s1">&#39;[&#39;</span> <span class="s1">&#39;!&#39;</span> -e /etc/tor/torrc <span class="s1">&#39;]&#39;</span>
 + envsubst
 + /usr/bin/tor -f torrc
-Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor v0.2.8.7 running on Linux with Libevent 2.0.22-stable, OpenSSL 1.0.2j and Zlib 1.2.8.
-Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor can<span class="err">&#39;</span>t <span class="nb">help</span> you <span class="k">if</span> you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
-Sep <span class="m">29</span> 13:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Read configuration file <span class="s2">&quot;/data/torrc&quot;</span>.
-Sep <span class="m">29</span> 13:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Wow!  I detected that you have <span class="m">24</span> CPUs. I will not autodetect any more than 16, though.  If you want to configure more, <span class="nb">set</span> NumCPUs in your torrc
-Sep <span class="m">29</span> 13:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Opening Socks listener on 127.0.0.1:9050
-Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv4 file //share/tor/geoip.
-Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv6 file //share/tor/geoip6.
-Sep <span class="m">29</span> 13:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 0%: Starting
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 5%: Connecting to directory server
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 10%: Finishing handshake with directory server
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 15%: Establishing an encrypted directory connection
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 20%: Asking <span class="k">for</span> networkstatus consensus
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 25%: Loading networkstatus consensus
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 40%: Loading authority key certs
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 45%: Asking <span class="k">for</span> relay descriptors
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have 0/7187, and can only build 0% of likely paths. <span class="o">(</span>We have 0% of guards bw, 0% of midpoint bw, and 0% of <span class="nb">exit</span> <span class="nv">bw</span> <span class="o">=</span> 0% of path bw.<span class="o">)</span>
-Sep <span class="m">29</span> 13:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 50%: Loading relay descriptors
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 56%: Loading relay descriptors
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 62%: Loading relay descriptors
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 67%: Loading relay descriptors
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 75%: Loading relay descriptors
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 80%: Connecting to the Tor network
-Sep <span class="m">29</span> 13:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 90%: Establishing a Tor circuit
-Sep <span class="m">29</span> 13:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Tor has successfully opened a circuit. Looks like client functionality is working.
-Sep <span class="m">29</span> 13:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped 100%: Done
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor v0.2.8.7 running on Linux with Libevent <span class="m">2</span>.0.22-stable, OpenSSL <span class="m">1</span>.0.2j and Zlib <span class="m">1</span>.2.8.
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Tor can<span class="err">&#39;</span>t <span class="nb">help</span> you <span class="k">if</span> you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.101 <span class="o">[</span>notice<span class="o">]</span> Read configuration file <span class="s2">&quot;/data/torrc&quot;</span>.
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Wow!  I detected that you have <span class="m">24</span> CPUs. I will not autodetect any more than <span class="m">16</span>, though.  If you want to configure more, <span class="nb">set</span> NumCPUs in your torrc
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.107 <span class="o">[</span>notice<span class="o">]</span> Opening Socks listener on <span class="m">127</span>.0.0.1:9050
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv4 file //share/tor/geoip.
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Parsing GEOIP IPv6 file //share/tor/geoip6.
+Sep <span class="m">29</span> <span class="m">13</span>:05:40.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">0</span>%: Starting
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">5</span>%: Connecting to directory server
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">10</span>%: Finishing handshake with directory server
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">15</span>%: Establishing an encrypted directory connection
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">20</span>%: Asking <span class="k">for</span> networkstatus consensus
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">25</span>%: Loading networkstatus consensus
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We have no usable consensus.
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">40</span>%: Loading authority key certs
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">45</span>%: Asking <span class="k">for</span> relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> I learned some more directory information, but not enough to build a circuit: We need more microdescriptors: we have <span class="m">0</span>/7187, and can only build <span class="m">0</span>% of likely paths. <span class="o">(</span>We have <span class="m">0</span>% of guards bw, <span class="m">0</span>% of midpoint bw, and <span class="m">0</span>% of <span class="nb">exit</span> <span class="nv">bw</span> <span class="o">=</span> <span class="m">0</span>% of path bw.<span class="o">)</span>
+Sep <span class="m">29</span> <span class="m">13</span>:05:41.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">50</span>%: Loading relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">56</span>%: Loading relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">62</span>%: Loading relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">67</span>%: Loading relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">75</span>%: Loading relay descriptors
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">80</span>%: Connecting to the Tor network
+Sep <span class="m">29</span> <span class="m">13</span>:05:42.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">90</span>%: Establishing a Tor circuit
+Sep <span class="m">29</span> <span class="m">13</span>:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Tor has successfully opened a circuit. Looks like client functionality is working.
+Sep <span class="m">29</span> <span class="m">13</span>:05:43.000 <span class="o">[</span>notice<span class="o">]</span> Bootstrapped <span class="m">100</span>%: Done
 </pre></div>
 
 
@@ -238,8 +238,8 @@ receiving incremental file list
 hostname
 private_key
 
-sent <span class="m">68</span> bytes  received <span class="m">1074</span> bytes  761.33 bytes/sec
-total size is <span class="m">910</span>  speedup is 0.80
+sent <span class="m">68</span> bytes  received <span class="m">1074</span> bytes  <span class="m">761</span>.33 bytes/sec
+total size is <span class="m">910</span>  speedup is <span class="m">0</span>.80
 </pre></div>
 
 
@@ -653,5 +653,5 @@ var disqus_config = function () {
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/tor_hidden_service_on_openshift_3.md">notes/tor_hidden_service_on_openshift_3.md</a>&nbsp;(<a href="../notes/tor_hidden_service_on_openshift_3.md.asc">GPG sig</a>)&nbsp;Wed&nbsp;Oct&nbsp;&nbsp;5&nbsp;13:42:31&nbsp;CEST&nbsp;2016&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/tor_hidden_service_on_openshift_3.md">notes/tor_hidden_service_on_openshift_3.md</a>&nbsp;(<a href="/notes/tor_hidden_service_on_openshift_3.md.asc.txt">GPG sig</a>)&nbsp;Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;19:13:54&nbsp;CEST&nbsp;2017&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>

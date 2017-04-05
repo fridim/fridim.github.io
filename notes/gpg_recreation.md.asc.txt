@@ -1,6 +1,7 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
+%%sign%%
 C'est l'heure de la récréation … GPG
 - ------------------------------------
 <small>2015-05-23 par fridim ~ #gpg</small>
@@ -328,17 +329,17 @@ Nous voilà bien avancés ! Bref, on fait un backup. Sur un autre support de pr�
 * [about Comment in user ID](https://www.debian-administration.org/users/dkg/weblog/97)
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE2CQs0rRMirkYeGAnLJDT5Fc/2N4FAljSRGgACgkQLJDT5Fc/
-2N7vOBAAy71rtQ7Q6dQjaORTDkJSJHWhPo5FZVUZBCjHecu7GjY+1W4TcNK5QB6o
-h1sxYQhZhZj1faaNxnROfp8Yep8l5P++nWJjnk8k9qid25NuW/QX8TiZ3xhoasoH
-JJmVXfSOk9IMfsJ42dEx0BjVl85qhrmud3Mn2ddOMEfoaKHvUAC4PGrs9y6hXp+J
-Io4NApK2i6PHIJxXeeFMJlb4+3f41QvCeW3BwG9lrv61YIxkskJm9ndNLjuHTh0X
-S/mZnnNHqKze6K03auOBIRCk6crilUWUq+/wbT6I3iDs4Lf55p9w7lt45DKOCLh1
-e+ApNFXm1mtXeWcdpXeYd4q6+SjHF7V7wmJFz1P4Qcg4yT+1pirK9a22qoYH9Vxr
-fF4sfzic5KarCwoenPxu03JhacERJqZUYaGF7QhL2Ot8pXBueyCm1Faia837pjGQ
-Jtp9chSu+I40m9ZQCNHV/HrWGhtSfN2FVho1BORm2Y+Z4szhGgDue1oGHnGgc7cz
-oiMjs2DtcrrT5xiR7SThzcqjS7+y103lXsbHf6dCEG62DDDvAXkRkwV6lugLxgmt
-U5MYWt3LwUCgPNjKt54oeTtJ8sy3cPoINgInhVTCB54LkcTCTcU0POfHBGSEcjKk
-MwrdKAjLkTVqtou59i1ASDg7LkrBzhDu6XyKcKuUdSVDA497VB4=
-=j79D
+iQIzBAEBCgAdFiEE2CQs0rRMirkYeGAnLJDT5Fc/2N4FAljlJB8ACgkQLJDT5Fc/
+2N7gBg//bH61AtcHWMsvF9m7HiwSn6O8s7Ne1NCRaGZUXiAYLU70WXWeLvnmqOjr
+L44jPE3WA0eAfom12kYCY10kqiuWq2MvtdwBRCush10MGXP0VTag9Qg7LaE5hDvf
+x7zOR9inupiaqo5lcqSoGx96BWL5m2li8jEIAvbtBXgrGJkLk+VAj9IPWdsrAfEp
+hZD7nHm3XOVXzC5PCh5uk4wrOPGOyPt6vMiaLKHCKH2V6TcCfnRo8IjplgBe1QL/
+ofLHe3ixThc8T7sQoJfjPTin+36jg/KawxHdBFoIguJj6ypUA11h/AnFFTJJJlDx
+YrBuxJG0UqRJ4Xi/S3dJm1q5kn7SMdX9ph1pQYGGaSjpBmU3cZzfFDgdt3Ka5vbX
+EzmHGSFdwvpJc0CtwpRJscgKdvFOWWGCZDEriDI6JYHjFgQ5lDMY519LcA3m9cXF
+l2fvkq3tNwzmIY1xLN9tdA2yYbAvcpbAN21KIcDuPiSSyN5UIljrpv4VWgTNHk5A
+wrjM+8Ff6/vEJT/bDVpdRxMz1Y64UBXAcRY3fRbAWRf1VqwXannhbIx00eqVGE3r
+tyuwGGmWKJAWpNxR4SiR4W1ZhXQ7rFX9Zt3b5NyKGavVu2dqI4tHpoXJwVHpV33g
+Wppw7wL9K21+iH2iURnRCndtmOSUzjy/FcjslZN0npN4l363YNk=
+=US85
 -----END PGP SIGNATURE-----

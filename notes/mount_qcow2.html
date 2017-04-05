@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Guillaume Coré (fridim) - personal page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="StyleSheet" rev="StyleSheet" href="/pygments.css" type="text/css" />
+  <!-- <link rel="StyleSheet" rev="StyleSheet" href="/bootstrap.min.css" type="text/css" /> -->
+  <link rel="StyleSheet" rev="StyleSheet" href="/index.css" type="text/css" />
+
+</head>
+
+<body>
+<h1>How to mount qcow2 disk image</h1>
+<p><img alt="img" src="../images/cloud.png" /></p>
+<p>Use <a href="https://github.com/NetworkBlockDevice/nbd">nbd</a> module and qemu-nbd.</p>
+<div class="codehilite"><pre><span></span>sudo modprobe nbd <span class="nv">max_part</span><span class="o">=</span><span class="m">8</span>
+sudo qemu-nbd --connect<span class="o">=</span>/dev/nbd0 imagename.qcow
+sudo partprobe
+mkdir -p /tmp/vm-ro
+sudo mount -o ro /dev/nbd0p2 /tmp/vm-ro
+
+<span class="c1">#when done</span>
+umount /tmp/vm-ro
+qemu-nbd -d /dev/nbd0
+rmmod nbd
+</pre></div>
+
+
+<p>You can safely mount RW if the VM is stopped.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://github.com/NetworkBlockDevice/nbd">https://github.com/NetworkBlockDevice/nbd</a></li>
+<li><a href="https://en.wikibooks.org/wiki/QEMU/Images">https://en.wikibooks.org/wiki/QEMU/Images</a></li>
+</ul><div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//fridim.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/mount_qcow2.md">notes/mount_qcow2.md</a>&nbsp;(<a href="/notes/mount_qcow2.md.asc.txt">GPG sig</a>)&nbsp;Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;19:13:54&nbsp;CEST&nbsp;2017&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+</body></html>
