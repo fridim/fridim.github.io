@@ -29,6 +29,24 @@ rmmod nbd
 
 
 <p>You can safely mount RW if the image is not used by a VM, or VM is stopped. It can be a quick alternative to <a href="http://libguestfs.org/virt-customize.1.html">virt-customize</a> if you need to make simple modifications on an image.</p>
+<h2>Kernel module ?</h2>
+<p>I just came across this <a href="https://upcommons.upc.edu/bitstream/handle/2099.1/9619/65757.pdf">paper</a>. The guy created a kernel module, qloop to use a qcow2 image directly like a block device.</p>
+<div class="codehilite"><pre><span></span>losetup /dev/qloop0 file.qcow2
+</pre></div>
+
+
+<p>That is all. Now, the device file <code>/dev/qloop0</code> will behave like a block device containing all the data in the disk described in file.qcow2.</p>
+<div class="codehilite"><pre><span></span>losetup -d /dev/qloop0 #when done
+</pre></div>
+
+
+<p>The paper also summaries all the current methods to read or write to a qcow2 image and even if it's from 2010, it's still worth mentioning.</p>
+<ul>
+<li>FUSE : not suitable</li>
+<li>libguestfs : more mature today than in 2010 (Red Hat)</li>
+<li>qemu-nbd : qemu official solution </li>
+<li>convert to raw format : simplest, but use a lot of space</li>
+</ul>
 <p>Links:</p>
 <ul>
 <li><a href="https://github.com/NetworkBlockDevice/nbd">https://github.com/NetworkBlockDevice/nbd</a></li>
@@ -58,5 +76,5 @@ var disqus_config = function () {
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/mount_qcow2.md">notes/mount_qcow2.md</a>&nbsp;(<a href="/notes/mount_qcow2.md.asc.txt">GPG sig</a>)&nbsp;Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;19:53:02&nbsp;CEST&nbsp;2017&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+<hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/mount_qcow2.md">notes/mount_qcow2.md</a>&nbsp;(<a href="/notes/mount_qcow2.md.asc.txt">GPG sig</a>)&nbsp;Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;23:29:14&nbsp;CEST&nbsp;2017&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>
