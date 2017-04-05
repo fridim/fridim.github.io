@@ -15,10 +15,12 @@ Use [nbd](https://github.com/NetworkBlockDevice/nbd) module and qemu-nbd.
     qemu-nbd -d /dev/nbd0
     rmmod nbd
 
-You can safely mount RW if the VM is stopped.
+You can safely mount RW if the image is not used by a VM, or VM is stopped. It can be a quick alternative to [virt-customize](http://libguestfs.org/virt-customize.1.html) if you need to make simple modifications on an image.
 
 Links:
 
 - <https://github.com/NetworkBlockDevice/nbd>
 - <https://en.wikibooks.org/wiki/QEMU/Images>
-
+- see also <http://libguestfs.org/>
+    - <http://libguestfs.org/virt-customize.1.html>
+    - <http://libguestfs.org/virt-builder.1.html>
