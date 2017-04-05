@@ -27,7 +27,7 @@ That is all. Now, the device file <code>/dev/qloop0</code> will behave like a bl
 
     losetup -d /dev/qloop0 #when done
 
-The paper also summaries all the current methods to read or write to a qcow2 image and even if it's from 2010, it's still worth mentioning.
+The paper also summaries all the current methods to mount qcow2 image and even if it's from 2010, it's still worth mentioning.
 
 - FUSE : not suitable
 - libguestfs : more mature today than in 2010 (Red Hat)
@@ -36,8 +36,9 @@ The paper also summaries all the current methods to read or write to a qcow2 ima
 
 Links:
 
+- [QLOOP Linux driver to mount QCOW2 virtual disks](https://upcommons.upc.edu/bitstream/handle/2099.1/9619/65757.pdf)
 - <https://github.com/NetworkBlockDevice/nbd>
 - <https://en.wikibooks.org/wiki/QEMU/Images>
-- see also <http://libguestfs.org/>
-    - <http://libguestfs.org/virt-customize.1.html>
-    - <http://libguestfs.org/virt-builder.1.html>
+- [libguestfs](http://libguestfs.org/)
+- [virt-customize](http://libguestfs.org/virt-customize.1.html)
+- [virt-builder](http://libguestfs.org/virt-builder.1.html)
