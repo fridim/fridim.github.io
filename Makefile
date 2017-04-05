@@ -20,14 +20,17 @@ all: $(htmlfiles) $(signedfiles) $(drafthtml)
 		[ -e "inc/$@" ] && cat "inc/$@"; \
 		markdown_py -x codehilite <(./toc.rb <(sed '/^%%sign%%/d' $<)) ;\
 		[ "$@" != "index.html" ] && cat inc/disqus.html ;\
-		echo '<hr /><div id="footer">$$&nbsp;from&nbsp;<a href="../$<">$<</a>&nbsp;(<a href="/$<.asc.txt">GPG sig</a>)&nbsp;$(shell date|sed "s/ /\&nbsp;/g")&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>'; \
+		echo '<hr /><div id="footer">$$&nbsp;from&nbsp;<a href="../$<">$<</a>&nbsp;';\
+		if [ -e $<.asc.txt ]; then \
+		  echo '(<a href="/$<.asc.txt">GPG sig</a>)&nbsp;' ;\
+		fi ;\
+		echo "$(shell date|sed "s/ /\&nbsp;/g")" ;\
+		echo '&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>' ;\
 		echo "</body></html>") > $@
 
 %.md.asc.txt: %.md
 	@rm -f $@
 	if grep -q '%%sign%%' $<; then \
-    gpg -u $(GPGkey) --clearsign $< ;\
-    mv $<.asc $@ ;\
-  else \
-    echo 'NOP :)' > $@ ;\
-  fi
+          gpg -u $(GPGkey) --clearsign $< ;\
+          mv $<.asc $@ ;\
+        fi
