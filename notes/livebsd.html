@@ -25,26 +25,23 @@ official website: there is only the installation image.  I found
 <a href="http://liveusb-openbsd.sourceforge.net/">liveusb-openbsd</a>, but I don't trust
 them. So here is a way to create one puffy USB stick.</p>
 <p>Dependency : <code>qemu</code></p>
-<div class="codehilite"><pre><span></span>wget http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/amd64/install55.iso
+<div class="codehilite"><pre><span></span><code>wget http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/amd64/install55.iso
 sha256sum install55.iso <span class="c1"># should be cc465ce3f8397883e91c6e1a8a98b1b3507a338984bbfe8978050c5f8fdcaf3f</span>
 qemu-img create liveusb.img 825000k <span class="c1"># you may need more space if you want X</span>
 qemu-system-x86_64 -hda liveusb.img -m <span class="m">1024</span> -cdrom install55.iso <span class="c1"># perform install</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>Once installation is done, you may want to add additional packages. Inside the VM:</p>
-<div class="codehilite"><pre><span></span>reboot
+<div class="codehilite"><pre><span></span><code>reboot
 <span class="nb">export</span> <span class="nv">PKG_PATH</span><span class="o">=</span>http://ftp.fr.openbsd.org/pub/OpenBSD/5.5/packages/amd64/
 pkg_add gnupg <span class="c1"># for example</span>
 shutdown -h now
-</pre></div>
-
+</code></pre></div>
 
 <p>From the Linux again:</p>
-<div class="codehilite"><pre><span></span>dd <span class="k">if</span><span class="o">=</span>liveusb.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>512k <span class="p">;</span> sync <span class="c1"># replace /dev/sdc with your usb stick device</span>
+<div class="codehilite"><pre><span></span><code>dd <span class="k">if</span><span class="o">=</span>liveusb.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>512k <span class="p">;</span> sync <span class="c1"># replace /dev/sdc with your usb stick device</span>
 qemu-system-x86_64 -usb -hda /dev/sdc  <span class="c1"># test to see if it boot</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>It's ready!</p><div id="disqus_thread"></div>
 <script>
@@ -67,6 +64,6 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/livebsd.md">notes/livebsd.md</a>&nbsp;
-Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;23:57:08&nbsp;CEST&nbsp;2017
+Mon&nbsp;Oct&nbsp;26&nbsp;10:26:09&nbsp;AM&nbsp;CET&nbsp;2020
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>

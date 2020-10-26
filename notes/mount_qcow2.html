@@ -15,7 +15,7 @@
 <h1>How to mount qcow2 disk image</h1>
 <p><img alt="img" src="../images/cloud.png" /></p>
 <p>Use <a href="https://github.com/NetworkBlockDevice/nbd">nbd</a> module and qemu-nbd.</p>
-<div class="codehilite"><pre><span></span>sudo modprobe nbd <span class="nv">max_part</span><span class="o">=</span><span class="m">8</span>
+<div class="codehilite"><pre><span></span><code>sudo modprobe nbd <span class="nv">max_part</span><span class="o">=</span><span class="m">8</span>
 sudo qemu-nbd --connect<span class="o">=</span>/dev/nbd0 imagename.qcow
 sudo partprobe
 mkdir -p /tmp/vm-ro
@@ -25,20 +25,17 @@ sudo mount -o ro /dev/nbd0p2 /tmp/vm-ro
 umount /tmp/vm-ro
 qemu-nbd -d /dev/nbd0
 rmmod nbd
-</pre></div>
-
+</code></pre></div>
 
 <p>You can safely mount RW if the image is not used by a VM, or VM is stopped. It can be a quick alternative to <a href="http://libguestfs.org/virt-customize.1.html">virt-customize</a> if you need to make simple modifications on an image.</p>
 <h2>Kernel module ?</h2>
 <p>I just came across this <a href="https://upcommons.upc.edu/bitstream/handle/2099.1/9619/65757.pdf">paper</a>. The guy created a kernel module, qloop to use a qcow2 image directly like a block device.</p>
-<div class="codehilite"><pre><span></span>losetup /dev/qloop0 file.qcow2
-</pre></div>
-
+<div class="codehilite"><pre><span></span><code><span class="err">losetup /dev/qloop0 file.qcow2</span>
+</code></pre></div>
 
 <p>That is all. Now, the device file <code>/dev/qloop0</code> will behave like a block device containing all the data in the disk described in file.qcow2.</p>
-<div class="codehilite"><pre><span></span>losetup -d /dev/qloop0 #when done
-</pre></div>
-
+<div class="codehilite"><pre><span></span><code><span class="err">losetup -d /dev/qloop0 #when done</span>
+</code></pre></div>
 
 <p>The paper also summaries all the current methods to mount qcow2 image and even if it's from 2010, it's still worth mentioning.</p>
 <ul>
@@ -76,6 +73,6 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/mount_qcow2.md">notes/mount_qcow2.md</a>&nbsp;
-Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;23:57:07&nbsp;CEST&nbsp;2017
+Mon&nbsp;Oct&nbsp;26&nbsp;10:26:08&nbsp;AM&nbsp;CET&nbsp;2020
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>

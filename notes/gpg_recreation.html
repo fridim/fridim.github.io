@@ -53,16 +53,15 @@
 <h2>Création du livecd OpenBSD</h2>
 <p>Étapes décrites dans un post précedent : <a href="/notes/livebsd.html">livebsd</a>.</p>
 <p>Les commandes en vrac avec la dernière version d'OpenBSD :</p>
-<div class="codehilite"><pre><span></span>wget http://ftp.fr.openbsd.org/pub/OpenBSD/5.7/amd64/install57.iso
+<div class="codehilite"><pre><span></span><code>wget http://ftp.fr.openbsd.org/pub/OpenBSD/5.7/amd64/install57.iso
 sha256sum install57.iso <span class="c1"># -&gt; 3f714d249a6dc8f40c2fc2fccea8ef9987e74a2b81483175d081661c3533b59a</span>
 qemu-img create liveusb.img 1525000k <span class="c1"># we can allocate more space</span>
 qemu-system-x86_64 -hda liveusb.img -smp <span class="m">2</span> -m <span class="m">6000</span> -cdrom install57.iso <span class="c1"># you may want to use less memory</span>
 <span class="c1"># Install starts...</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>Une fois l'installation terminée, reboot de la VM puis install/setup de quelques paquets. Dans la VM:</p>
-<div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">PKG_PATH</span><span class="o">=</span>http://ftp.fr.openbsd.org/pub/OpenBSD/5.7/packages/amd64/
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span> <span class="nv">PKG_PATH</span><span class="o">=</span>http://ftp.fr.openbsd.org/pub/OpenBSD/5.7/packages/amd64/
 pkg_add gnupg bash rxvt-unicode vim <span class="c1"># for example</span>
 chsh -s /usr/local/bin/bash fridim
 cat &gt; /home/fridim/.xsession <span class="s">&lt;&lt;EOF</span>
@@ -85,14 +84,12 @@ cat &gt; <span class="nv">$GNUPGHOME</span>/gpg.conf <span class="s">&lt;&lt;EOF
 <span class="s">charset utf-8</span>
 <span class="s">EOF</span>
 shutdown -h now
-</pre></div>
-
+</code></pre></div>
 
 <p>On copie l'image sur la clef USB :</p>
-<div class="codehilite"><pre><span></span>sudo dd <span class="k">if</span><span class="o">=</span>liveusb.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>512k <span class="p">;</span> sync <span class="c1"># replace /dev/sdc with your usb stick device</span>
+<div class="codehilite"><pre><span></span><code>sudo dd <span class="k">if</span><span class="o">=</span>liveusb.img <span class="nv">of</span><span class="o">=</span>/dev/sdc <span class="nv">bs</span><span class="o">=</span>512k <span class="p">;</span> sync <span class="c1"># replace /dev/sdc with your usb stick device</span>
 qemu-system-x86_64 -hda /dev/sdc  <span class="c1"># test to see if it boot</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>À ce stade on a un livecd avec le minimum de paquet (dont gnupg) et de configuration.</p>
 <p><a id='toc-id-1' /></p>
@@ -111,7 +108,7 @@ qemu-system-x86_64 -hda /dev/sdc  <span class="c1"># test to see if it boot</spa
 <p>Avant tout, <a href="http://world.std.com/~reinhold/diceware.html">bien choisir sa passphrase</a>.</p>
 <p>Je démarre la machine offline (un vieux laptop qui traîne finalement) avec le livecd OpenBSD pour générer la clef.
 Il est possible de passer des paramètres à GnuPG grâce à l'option <a href="https://www.gnupg.org/documentation/manuals/gnupg/Unattended-GPG-key-generation.html#Unattended-GPG-key-generation"><code>--batch</code></a>. Voici ce que j'ai choisi comme options pour ma masterkey :</p>
-<div class="codehilite"><pre><span></span>cat &gt; masterkey_params <span class="s">&lt;&lt;PARAMS</span>
+<div class="codehilite"><pre><span></span><code>cat &gt; masterkey_params <span class="s">&lt;&lt;PARAMS</span>
 <span class="s">%echo Generating a masterkey</span>
 <span class="s">Key-Type: RSA</span>
 <span class="s">Key-Length: 3936</span>
@@ -126,8 +123,7 @@ Il est possible de passer des paramètres à GnuPG grâce à l'option <a href="h
 <span class="s">%echo done</span>
 <span class="s">PARAMS</span>
 gpg2 --batch --gen-key masterkey_params
-</pre></div>
-
+</code></pre></div>
 
 <p>Pour la taille de 3936, je me base sur l'hypothèse que l'effort pour cracker une clef RSA serait concentré sur l'habituel taille en puissance de 2 (1024, 2048, 4096). C'est parfaitement infondé, mais il n'y a pas de contre-indication, alors pourquoi pas ? Concernant les préférences, c'est assez classique des « best practices » sauf que j'ai déplacé <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> (128 bits) pour le mettre en dernière position. <a href="http://csrc.nist.gov/groups/ST/toolkit/documents/aes/CNSS15FS.pdf">D'après la NSA</a> il y a une différence de SECRET à TOP SECRET (???) entre AES 128 et 192 mais rien de tel pour CAMELIA au niveau des différentes tailles de clef :</p>
 <blockquote>
@@ -136,36 +132,35 @@ gpg2 --batch --gen-key masterkey_params
 <p>À ce niveau là, je pense que c'est du chipotage et surtout que AES256 sera supporté par toutes les implémentations (GnuPG en tout cas).</p>
 <p>Je ne savais pas que le champs Comment des UID était considéré dangereux par <a href="https://www.debian-administration.org/users/dkg/weblog/97">certains</a>. Je pense qu'on peut quand meme l'utiliser pour son nickname lorsqu'il n'est pas déjà visible dans l'adresse mail. Mon nickname servant pour IRC/github/twitter/etc, ça fait du sens.</p>
 <p>Exemple de sortie :</p>
-<div class="codehilite"><pre><span></span>plop:~/tmp/gpgtests$ gpg2 --batch --gen-key params
-gpg: Generating a masterkey
-gpg: key 722F12DA marked as ultimately trusted
-gpg: directory &#39;/home/fridim/tmp/gpgtests/openpgp-revocs.d&#39; created
-gpg: done
+<div class="codehilite"><pre><span></span><code><span class="nl">plop</span><span class="p">:</span><span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gpgtests</span><span class="err">$</span><span class="w"> </span><span class="n">gpg2</span><span class="w"> </span><span class="o">--</span><span class="n">batch</span><span class="w"> </span><span class="o">--</span><span class="n">gen</span><span class="o">-</span><span class="k">key</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">Generating</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">masterkey</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="mi">722</span><span class="n">F12DA</span><span class="w"> </span><span class="n">marked</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">ultimately</span><span class="w"> </span><span class="n">trusted</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="s1">&#39;/home/fridim/tmp/gpgtests/openpgp-revocs.d&#39;</span><span class="w"> </span><span class="n">created</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">done</span><span class="w"></span>
 
-plop:~/tmp/gpgtests$ gpg2 --edit-key fridim
-gpg (GnuPG) 2.1.3; Copyright (C) 2015 Free Software Foundation, Inc.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
+<span class="nl">plop</span><span class="p">:</span><span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gpgtests</span><span class="err">$</span><span class="w"> </span><span class="n">gpg2</span><span class="w"> </span><span class="o">--</span><span class="n">edit</span><span class="o">-</span><span class="k">key</span><span class="w"> </span><span class="n">fridim</span><span class="w"></span>
+<span class="n">gpg</span><span class="w"> </span><span class="p">(</span><span class="n">GnuPG</span><span class="p">)</span><span class="w"> </span><span class="mf">2.1.3</span><span class="p">;</span><span class="w"> </span><span class="n">Copyright</span><span class="w"> </span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="mi">2015</span><span class="w"> </span><span class="k">Free</span><span class="w"> </span><span class="n">Software</span><span class="w"> </span><span class="n">Foundation</span><span class="p">,</span><span class="w"> </span><span class="n">Inc</span><span class="p">.</span><span class="w"></span>
+<span class="n">This</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">free</span><span class="w"> </span><span class="nl">software</span><span class="p">:</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">are</span><span class="w"> </span><span class="k">free</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">redistribute</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="w"></span>
+<span class="n">There</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">NO</span><span class="w"> </span><span class="n">WARRANTY</span><span class="p">,</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">extent</span><span class="w"> </span><span class="n">permitted</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">law</span><span class="p">.</span><span class="w"></span>
 
-Secret key is available.
+<span class="n">Secret</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">available</span><span class="p">.</span><span class="w"></span>
 
-gpg: checking the trustdb
-gpg: 3 marginal(s) needed, 1 complete(s) needed, PGP trust model
-gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
-gpg: next trustdb check due at 2016-05-13
-pub  rsa3936/722F12DA
-     created: 2015-05-23  expires: 2016-05-13  usage: SC
-     trust: ultimate      validity: ultimate
-[ultimate] (1). Guillaume Coré &lt;fridim@onfi.re&gt;
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="n">checking</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">trustdb</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">marginal</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">needed</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">complete</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">needed</span><span class="p">,</span><span class="w"> </span><span class="n">PGP</span><span class="w"> </span><span class="n">trust</span><span class="w"> </span><span class="n">model</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="k">depth</span><span class="err">:</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="nl">valid</span><span class="p">:</span><span class="w">   </span><span class="mi">1</span><span class="w">  </span><span class="nl">signed</span><span class="p">:</span><span class="w">   </span><span class="mi">0</span><span class="w">  </span><span class="nl">trust</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">-</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="n">u</span><span class="w"></span>
+<span class="nl">gpg</span><span class="p">:</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="n">trustdb</span><span class="w"> </span><span class="k">check</span><span class="w"> </span><span class="n">due</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="mi">2016</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">13</span><span class="w"></span>
+<span class="n">pub</span><span class="w">  </span><span class="n">rsa3936</span><span class="o">/</span><span class="mi">722</span><span class="n">F12DA</span><span class="w"></span>
+<span class="w">     </span><span class="nl">created</span><span class="p">:</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span><span class="w">  </span><span class="nl">expires</span><span class="p">:</span><span class="w"> </span><span class="mi">2016</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">13</span><span class="w">  </span><span class="k">usage</span><span class="err">:</span><span class="w"> </span><span class="n">SC</span><span class="w"></span>
+<span class="w">     </span><span class="nl">trust</span><span class="p">:</span><span class="w"> </span><span class="n">ultimate</span><span class="w">      </span><span class="nl">validity</span><span class="p">:</span><span class="w"> </span><span class="n">ultimate</span><span class="w"></span>
+<span class="o">[</span><span class="n">ultimate</span><span class="o">]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="o">&lt;</span><span class="n">fridim</span><span class="nv">@onfi</span><span class="p">.</span><span class="n">re</span><span class="o">&gt;</span><span class="w"></span>
 
-gpg&gt; showpref
-[ultimate] (1). Guillaume Coré &lt;fridim@onfi.re&gt;
-     Cipher: AES256, AES192, CAMELLIA256, CAMELLIA192, TWOFISH, AES, 3DES
-     Digest: SHA512, SHA384, SHA256, SHA224, SHA1
-     Compression: ZLIB, BZIP2, ZIP, Uncompressed
-     Features: MDC, Keyserver no-modify
-</pre></div>
-
+<span class="n">gpg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">showpref</span><span class="w"></span>
+<span class="o">[</span><span class="n">ultimate</span><span class="o">]</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="o">&lt;</span><span class="n">fridim</span><span class="nv">@onfi</span><span class="p">.</span><span class="n">re</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">     </span><span class="nl">Cipher</span><span class="p">:</span><span class="w"> </span><span class="n">AES256</span><span class="p">,</span><span class="w"> </span><span class="n">AES192</span><span class="p">,</span><span class="w"> </span><span class="n">CAMELLIA256</span><span class="p">,</span><span class="w"> </span><span class="n">CAMELLIA192</span><span class="p">,</span><span class="w"> </span><span class="n">TWOFISH</span><span class="p">,</span><span class="w"> </span><span class="n">AES</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="n">DES</span><span class="w"></span>
+<span class="w">     </span><span class="nl">Digest</span><span class="p">:</span><span class="w"> </span><span class="n">SHA512</span><span class="p">,</span><span class="w"> </span><span class="n">SHA384</span><span class="p">,</span><span class="w"> </span><span class="n">SHA256</span><span class="p">,</span><span class="w"> </span><span class="n">SHA224</span><span class="p">,</span><span class="w"> </span><span class="n">SHA1</span><span class="w"></span>
+<span class="w">     </span><span class="nl">Compression</span><span class="p">:</span><span class="w"> </span><span class="n">ZLIB</span><span class="p">,</span><span class="w"> </span><span class="n">BZIP2</span><span class="p">,</span><span class="w"> </span><span class="n">ZIP</span><span class="p">,</span><span class="w"> </span><span class="n">Uncompressed</span><span class="w"></span>
+<span class="w">     </span><span class="nl">Features</span><span class="p">:</span><span class="w"> </span><span class="n">MDC</span><span class="p">,</span><span class="w"> </span><span class="n">Keyserver</span><span class="w"> </span><span class="k">no</span><span class="o">-</span><span class="k">modify</span><span class="w"></span>
+</code></pre></div>
 
 <div class="warning">
 <p>Les accents dans le nom ! J'ai passé beaucoup de temps à comprendre pourquoi après la création réussie, j'avais des erreurs à l'utilisation de la clef (signature / key-edit / ...) du style:</p>
@@ -183,7 +178,7 @@ gpg&gt; showpref
 </div>
 
 <p>Puis on génère les sous-clefs utilisées pour l'usage courant :</p>
-<div class="codehilite"><pre><span></span>gpg2 --command-fd<span class="o">=</span><span class="m">0</span> --edit-key fridim <span class="s">&lt;&lt;-COMMANDS</span>
+<div class="codehilite"><pre><span></span><code>gpg2 --command-fd<span class="o">=</span><span class="m">0</span> --edit-key fridim <span class="s">&lt;&lt;-COMMANDS</span>
 <span class="s">addkey</span>
 <span class="s">4</span>
 <span class="s">4096</span>
@@ -194,13 +189,12 @@ gpg&gt; showpref
 <span class="s">1y</span>
 <span class="s">save</span>
 <span class="s">COMMANDS</span>
-</pre></div>
-
+</code></pre></div>
 
 <p><a id='toc-id-3' /></p>
 <h3>Expiration date</h3>
 <p>Une petite note au sujet de la date d'expiration : mettre une date d'expiration &lt;2y. En effet, une date d'expiration peut toujours être <strong>étendue</strong> si besoin! Penser juste à mettre une alerte dans son calendrier à la date voulue pour penser à l'étendre. Pour mettre à jour la date d'expiration de sa masterkey :</p>
-<div class="codehilite"><pre><span></span>gpg2 --command-fd<span class="o">=</span><span class="m">0</span> --edit-key <span class="s1">&#39;&lt;fingerprint&gt;&#39;</span> <span class="s">&lt;&lt;-COMMANDS</span>
+<div class="codehilite"><pre><span></span><code>gpg2 --command-fd<span class="o">=</span><span class="m">0</span> --edit-key <span class="s1">&#39;&lt;fingerprint&gt;&#39;</span> <span class="s">&lt;&lt;-COMMANDS</span>
 <span class="s">key 1</span>
 <span class="s">expire</span>
 <span class="s">2y</span>
@@ -210,13 +204,12 @@ gpg2 -a --export <span class="s1">&#39;&lt;fingerprint&gt;&#39;</span> &gt; /mnt
 <span class="c1"># on the online machine :</span>
 gpg2 --import &lt; /mnt/TRANSPORT_usbstick/masterkey.pub.asc
 gpg2 --keyserver keys.gnupg.net --send-key <span class="s1">&#39;&lt;fingerprint&gt;&#39;</span>
-</pre></div>
-
+</code></pre></div>
 
 <p><a id='toc-id-4' /></p>
 <h3>Backups et certificat de révocation</h3>
 <p>On créé tout de suite le certificat de révocation et un backup :</p>
-<div class="codehilite"><pre><span></span>mkdir -p ~/backups
+<div class="codehilite"><pre><span></span><code>mkdir -p ~/backups
 <span class="nb">cd</span> backups
 gpg2 --output revocation-certificate-A9903389.asc --gen-revoke A9903389!
 gpg2 --armor --export-secret-key A9903389! &gt; masterkey-A9903389.asc
@@ -228,8 +221,7 @@ gpg2 --list-packets &lt; masterkey-A9903389.asc
 gpg2 --list-packets &lt; subkeys-A9903389.asc
 <span class="nb">cd</span>
 tar czvf ~/backups/gnupg_masterkey.tar.gz .gnupg
-</pre></div>
-
+</code></pre></div>
 
 <p><a id='toc-id-5' /></p>
 <h2>Préparer la clef USB daily</h2>
@@ -240,20 +232,19 @@ tar czvf ~/backups/gnupg_masterkey.tar.gz .gnupg
 <li>FS ext4 (pas FAT32)</li>
 </ul>
 <p>Cette protection n'empêchera pas de devoir révoquer les subkeys si je perd cette clef USB, mais c'est une protection supplémentaire pour peu d'efforts en plus.</p>
-<div class="codehilite"><pre><span></span><span class="nv">usbstick</span><span class="o">=</span>/dev/sdb <span class="c1">#or whatever it is</span>
+<div class="codehilite"><pre><span></span><code><span class="nv">usbstick</span><span class="o">=</span>/dev/sdb <span class="c1">#or whatever it is</span>
 <span class="c1"># user root (or sudo)</span>
 cryptsetup luksFormat --key-size <span class="m">512</span> --hash sha512 --iter-time <span class="m">5000</span> <span class="nv">$usbstick</span>
 cryptsetup luksDump <span class="nv">$usbstick</span>
 cryptsetup luksOpen <span class="nv">$usbstick</span> dailysubkeys
 mkfs.ext4 /dev/mapper/dailysubkeys
-</pre></div>
-
+</code></pre></div>
 
 <p>Plus d'info sur les options pour <code>luksFormat</code> : <a href="https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#Encryption_options_for_LUKS_mode">wiki Arch</a></p>
 <p><a id='toc-id-6' /></p>
 <h3>Automount au boot</h3>
 <p>On chiffre mais il faut quand même que ce soit utilisable au quotidien. Pour ça, mettre à jour <code>/etc/crypttab</code> et <code>/etc/fstab</code></p>
-<div class="codehilite"><pre><span></span><span class="c1"># user root (or sudo)</span>
+<div class="codehilite"><pre><span></span><code><span class="c1"># user root (or sudo)</span>
 <span class="nv">usbstick</span><span class="o">=</span>/dev/sdb <span class="c1">#or whatever it is</span>
 <span class="nv">uuid</span><span class="o">=</span><span class="k">$(</span>lsblk -f <span class="nv">$usbstick</span> --output UUID -n<span class="k">)</span>
 <span class="nb">echo</span> <span class="s2">&quot;dailysubkeys   UUID=</span><span class="nv">$uuid</span><span class="s2"> none nofail,timeout=10&quot;</span> &gt;&gt; /etc/crypttab  <span class="c1">#nofail pour ne pas bloquer au boot</span>
@@ -261,47 +252,43 @@ mkfs.ext4 /dev/mapper/dailysubkeys
 <span class="c1"># pour éviter le reboot, on peut tenter directement :</span>
 /usr/lib/systemd/system-generators/systemd-cryptsetup-generator  <span class="c1">#this will create systemd-cryptsetup@dailysubkeys.service</span>
 systemctl daemon-reload
-</pre></div>
-
+</code></pre></div>
 
 <p><a id='toc-id-7' /></p>
 <h3>Exporter et importer</h3>
 <p>On peut utiliser une clef USB ou une carte SD pour faire passer les clefs et signatures depuis ou vers la machine offline. Copier sur la clef uniquement les subkeys et la partie publique de la masterkey. Sur le système connecté, vérifier la présence de <code>sec#</code> :</p>
-<div class="codehilite"><pre><span></span>plop:/$ gpg --list-secret-key
-/home/fridim/.gnupg/pubring.kbx
--------------------------------
-sec#  rsa3936/0x0A74F4B1A9903389 2015-05-22 [expires: 2016-05-21]
-uid                 [ unknown] Guillaume Coré &lt;fridim@onfi.re&gt;
-uid                 [ unknown] Guillaume Coré (fridim) &lt;gucore@redhat.com&gt;
-uid                 [ unknown] Guillaume Coré (fridim) &lt;guillaume.core@gmail.com&gt;
-ssb   rsa4096/0x2C90D3E4573FD8DE 2015-05-22 [expires: 2016-05-21]
-ssb   rsa4096/0x76F17D8B22049114 2015-05-22 [expires: 2016-05-21]
-</pre></div>
-
+<div class="codehilite"><pre><span></span><code><span class="c">plop:/$ gpg --list-secret-key</span>
+<span class="err">/home/fridim/.gnupg/pubring.kbx</span>
+<span class="err">-------------------------------</span>
+<span class="err">sec#  rsa3936/0x0A74F4B1A9903389 2015-05-22 [expires: 2016-05-21]</span>
+<span class="err">uid                 [ unknown] Guillaume Coré &lt;fridim@onfi.re&gt;</span>
+<span class="err">uid                 [ unknown] Guillaume Coré (fridim) &lt;gucore@redhat.com&gt;</span>
+<span class="err">uid                 [ unknown] Guillaume Coré (fridim) &lt;guillaume.core@gmail.com&gt;</span>
+<span class="err">ssb   rsa4096/0x2C90D3E4573FD8DE 2015-05-22 [expires: 2016-05-21]</span>
+<span class="err">ssb   rsa4096/0x76F17D8B22049114 2015-05-22 [expires: 2016-05-21]</span>
+</code></pre></div>
 
 <p>Pour les unknow il faut en effet mettre à jour les trusts de la clef puisqu'on l'a importée :</p>
-<div class="codehilite"><pre><span></span>gpg2 --edit-key 0A74F4B1A9903389
-trust
-gpg2 --list-keys 0A74F4B1A9903389
-sec#  rsa3936/0x0A74F4B1A9903389 2015-05-22 [expires: 2016-05-21]
-uid                 [ultimate] Guillaume Coré &lt;fridim@onfi.re&gt;
-uid                 [ultimate] Guillaume Coré (fridim) &lt;gucore@redhat.com&gt;
-uid                 [ultimate] Guillaume Coré (fridim) &lt;guillaume.core@gmail.com&gt;
-ssb   rsa4096/0x2C90D3E4573FD8DE 2015-05-22 [expires: 2016-05-21]
-ssb   rsa4096/0x76F17D8B22049114 2015-05-22 [expires: 2016-05-21]
-</pre></div>
-
+<div class="codehilite"><pre><span></span><code><span class="n">gpg2</span><span class="w"> </span><span class="o">--</span><span class="n">edit</span><span class="o">-</span><span class="k">key</span><span class="w"> </span><span class="mi">0</span><span class="n">A74F4B1A9903389</span><span class="w"></span>
+<span class="n">trust</span><span class="w"></span>
+<span class="n">gpg2</span><span class="w"> </span><span class="o">--</span><span class="n">list</span><span class="o">-</span><span class="n">keys</span><span class="w"> </span><span class="mi">0</span><span class="n">A74F4B1A9903389</span><span class="w"></span>
+<span class="n">sec</span><span class="err">#</span><span class="w">  </span><span class="n">rsa3936</span><span class="o">/</span><span class="mh">0x0A74F4B1A9903389</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n">ultimate</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="o">&lt;</span><span class="n">fridim</span><span class="nv">@onfi</span><span class="p">.</span><span class="n">re</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n">ultimate</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="p">(</span><span class="n">fridim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="n">gucore</span><span class="nv">@redhat</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n">ultimate</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="p">(</span><span class="n">fridim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="n">guillaume</span><span class="p">.</span><span class="n">core</span><span class="nv">@gmail</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">ssb</span><span class="w">   </span><span class="n">rsa4096</span><span class="o">/</span><span class="mh">0x2C90D3E4573FD8DE</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
+<span class="n">ssb</span><span class="w">   </span><span class="n">rsa4096</span><span class="o">/</span><span class="mh">0x76F17D8B22049114</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
+</code></pre></div>
 
 <p><a id='toc-id-8' /></p>
 <h2>La migration</h2>
 <ol>
 <li>
 <p>Signer l'ancienne clef et la nouvelle. Sur sa machine courante, si on a déjà importé les subkeys, pour signer la nouvelle clef il faut préciser quelle clef utiliser avec l'option <code>-u ID</code> :</p>
-<div class="codehilite"><pre><span></span>gpg2 -u &lt;old key&gt; --sign-key &lt;new key&gt;
+<div class="codehilite"><pre><span></span><code>gpg2 -u &lt;old key&gt; --sign-key &lt;new key&gt;
 <span class="c1"># dans mon cas:</span>
 gpg2 -u 3A69792B0483A324 --sign-key 0A74F4B1A9903389
-</pre></div>
-
+</code></pre></div>
 
 </li>
 <li>
@@ -309,11 +296,10 @@ gpg2 -u 3A69792B0483A324 --sign-key 0A74F4B1A9903389
 </li>
 <li>
 <p>Signer le statement avec l'ancienne et la nouvelle clef. Pour ça il faut importer son ancienne clef privée sur la machine offline. La signature du transition statement se fait sur la machine offline.</p>
-<div class="codehilite"><pre><span></span>gpg2 --local-user &lt;NOUVELLE&gt;! --local-user &lt;ANCIENNE&gt; --clearsign transition_statement.txt
-# dans mon cas :
-gpg2 --local-user A9903389! --local-user 0483A324 --clearsign transition_statement.txt
-</pre></div>
-
+<div class="codehilite"><pre><span></span><code><span class="err">gpg2 --local-user &lt;NOUVELLE&gt;! --local-user &lt;ANCIENNE&gt; --clearsign transition_statement.txt</span>
+<span class="err"># dans mon cas :</span>
+<span class="err">gpg2 --local-user A9903389! --local-user 0483A324 --clearsign transition_statement.txt</span>
+</code></pre></div>
 
 </li>
 <li>
@@ -340,8 +326,8 @@ gpg2 --local-user A9903389! --local-user 0483A324 --clearsign transition_stateme
 <blockquote>
 <p>For example, the regular DSA+Elgamal secret key I just tested comes out to 1281 bytes. The secret parts of that (plus some minor packet structure) come to only 149 bytes. It's a lot easier to re-enter 149 bytes correctly.</p>
 </blockquote>
-<p><hr id="liens" />
-<a id='toc-id-10' /></p>
+<hr id="liens" />
+<p><a id='toc-id-10' /></p>
 <h2>Liens</h2>
 <ul>
 <li><a href="http://blog.josefsson.org/2014/06/23/offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard/">offline GnuPG master key and subkeys on yubikey neo smartcard</a></li>
@@ -377,6 +363,6 @@ var disqus_config = function () {
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/gpg_recreation.md">notes/gpg_recreation.md</a>&nbsp;
 (<a href="/notes/gpg_recreation.md.asc.txt">GPG sig</a>)&nbsp;
-Wed&nbsp;Apr&nbsp;&nbsp;5&nbsp;23:57:06&nbsp;CEST&nbsp;2017
+Mon&nbsp;Oct&nbsp;26&nbsp;10:26:07&nbsp;AM&nbsp;CET&nbsp;2020
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>

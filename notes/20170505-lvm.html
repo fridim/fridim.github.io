@@ -66,21 +66,21 @@
 </ul>
 <p><a id="org0b96b85"></a></p>
 <h2>All in!</h2>
-<pre class="codehilite"><code class="language-bash">mdadm --fail /dev/md0 /dev/sda
+<div class="codehilite"><pre><span></span><code>mdadm --fail /dev/md0 /dev/sda
 mdadm --remove /dev/md0 /dev/sda
 mdadm --zero-superblock /dev/sda
 pvcreate /dev/sda
 vgextend vg0 /dev/sda
-pvmove /dev/md0   #start: 11:05   finish: 14:15   ~3h
+pvmove /dev/md0   <span class="c1">#start: 11:05   finish: 14:15   ~3h</span>
 vgreduce vg0 /dev/md0
 mdadm --stop /dev/md0
 mdadm --remove /dev/md0
 mdadm --zero-superblock /dev/sdb
 gdisk  /dev/sdb
-# partition type FD00 hex code
+<span class="c1"># partition type FD00 hex code</span>
 partprobe
 
-mdadm --create --verbose --level=1 --metadata=1.2 --raid-devices=2 /dev/md0 /dev/sdb1 missing
+mdadm --create --verbose --level<span class="o">=</span><span class="m">1</span> --metadata<span class="o">=</span><span class="m">1</span>.2 --raid-devices<span class="o">=</span><span class="m">2</span> /dev/md0 /dev/sdb1 missing
 mdadm --detail --scan &gt;&gt; /etc/mdadm.conf
 mdadm --assemble --scan
 
@@ -95,8 +95,8 @@ partprobe
 mdadm --add /dev/md0 /dev/sda1
 
 grub-mkconfig
-grub-install /dev/sda</code></pre>
-
+grub-install /dev/sda
+</code></pre></div>
 
 <p><a id="orgec80665"></a></p>
 <h1>Conclusion</h1>
@@ -127,6 +127,6 @@ var disqus_config = function () {
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/20170505-lvm.md">notes/20170505-lvm.md</a>&nbsp;
-Fri&nbsp;May&nbsp;&nbsp;5&nbsp;19:16:31&nbsp;CEST&nbsp;2017
+Mon&nbsp;Oct&nbsp;26&nbsp;10:26:08&nbsp;AM&nbsp;CET&nbsp;2020
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 </body></html>

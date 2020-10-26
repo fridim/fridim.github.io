@@ -1,4 +1,3 @@
-%%sign%%
 Guillaume Coré (fridim)
 =======================
 
@@ -16,11 +15,6 @@ Contact
 -------
 
 * my GnuPG [public key <code>0x0A74F4B1A9903389</code>](files/0x0A74F4B1A9903389.asc.txt)
-* my [OTR fingerprints](files/otr.clearsigned.txt)
 
 [![github](images/github-48x48.png)](http://github.com/fridim)
-[![twitter](images/twitter-48x48.png)](https://twitter.com/fridim)
 [![linkedin](images/linkedin-48x48.png)](http://www.linkedin.com/in/guillaumecore)
-
-These days, you will also find me on IRC freenode, geeknode, idling on several channels like
-[#racket](http://en.wikipedia.org/wiki/Racket_(programming_language)).
