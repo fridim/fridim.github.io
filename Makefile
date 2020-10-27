@@ -26,7 +26,7 @@ all: $(htmlfiles) $(signedfiles) $(drafthtml)
 		fi ;\
 		echo "$(shell date|sed "s/ /\&nbsp;/g")" ;\
 		echo '&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>' ;\
-		echo "</body></html>") > $@
+		cat inc/tail.html) > $@
 
 %.md.asc.txt: %.md
 	@rm -f $@
