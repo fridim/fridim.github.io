@@ -10,13 +10,6 @@ body {
   line-height: 1.42857143;
 }
 
-@media (max-width: 623px) {
-    body {
-        font-size: 8px;
-        /* margin: 0 0% 10px 0%; */
-    }
-}
-
 hr {
   background:#eee none repeat scroll 0 0;
   border:0 none;
@@ -42,7 +35,6 @@ dl {
   color: white;
   border: 3px solid #63afd0;
 }
-
 dd {
   font-size:85%;
   font-style:italic;
