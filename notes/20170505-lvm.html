@@ -5,6 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="description" content="LVM captain's log">
+<meta name="keywords" content="lvm">
+<meta name="author" content="Guillaume Coré (fridim)">
 <title>LVM &lt;3</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -435,27 +438,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
+<h1>LVM &lt;3</h1>
+<div class="details">
+<span id="author" class="author">Guillaume Coré (fridim)</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_lvm_3">LVM &lt;3</a>
-<ul class="sectlevel2">
 <li><a href="#_le_plan_de_bataille">Le plan de bataille</a></li>
 <li><a href="#_leçons_apprises">Leçons apprises</a></li>
 <li><a href="#_all_in">All in!</a></li>
-</ul>
-</li>
 <li><a href="#_conclusion">Conclusion</a></li>
 <li><a href="#_liens">Liens</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_lvm_3">LVM &lt;3</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Il m’arrive encore de m’extasier sur des acquis de longue date.
@@ -463,7 +466,7 @@ Aujourd’hui c’est LVM : c’est simple, solide, ça fonctionne, et ça rend
 bien service!</p>
 </div>
 <div class="paragraph">
-<p>Ma (modeste) configuration actuelle comporte :</p>
+<p>Ma configuration actuelle comporte :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -492,8 +495,11 @@ c’est vendredi! Et parce que sinon c’est pas drôle, je le fais sans
 disque supplémentaire, ni backup. J’aurais aussi bien pu titrer « How to
 lose all your data in one day! ». Bon tanpis, on se lance :)</p>
 </div>
-<div class="sect2">
-<h3 id="_le_plan_de_bataille">Le plan de bataille</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_le_plan_de_bataille">Le plan de bataille</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
@@ -544,25 +550,34 @@ longues. Cela dépend évidemment de la taille et des performances des
 disques mais ça peut donner une idée.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_leçons_apprises">Leçons apprises</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>bien wipe le début du disque qu’on retire du array car sinon LVM se
+</div>
+<div class="sect1">
+<h2 id="_leçons_apprises">Leçons apprises</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bien wipe le début du disque qu’on retire du array car sinon LVM se
 plaint d’avoir des PV dupliqués trouvés.</p>
-</li>
-<li>
-<p><strong>RTFM</strong> bien vérifier les options entre <code>sfdisk</code> et <code>sgdisk</code>. Ex:
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<strong>RTFM</strong> bien vérifier les options entre <code>sfdisk</code> et <code>sgdisk</code>. Ex:
 <code>sfdisk -d</code> c’est pour dump, <code>sgdisk -d</code> c’est pour <code>--delete</code>. C’est
 complétement contre-intuitif, mais tout le monde regarde le man avant de
-faire quelque chose d’idiot non ?</p>
-</li>
-</ul>
+faire quelque chose d’idiot non ?
+</td>
+</tr>
+</table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_all_in">All in!</h3>
+</div>
+<div class="sect1">
+<h2 id="_all_in">All in!</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="shell">mdadm --fail /dev/md0 /dev/sda
@@ -599,7 +614,6 @@ grub-install /dev/sda</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
 <h2 id="_conclusion">Conclusion</h2>
 <div class="sectionbody">
@@ -613,7 +627,7 @@ utiliser les disques à fond.</p>
 <div class="paragraph">
 <p>En pratique, je n’ai eu <strong>AUCUN</strong> souci, bonne surprise! Quelques petites
 choses ont été ajoutées/modifées a posteriori, et elles sont toutes (les
-deux) dans ``Leçons apprises''.</p>
+deux) dans « Leçons apprises ».</p>
 </div>
 </div>
 </div>
@@ -624,6 +638,9 @@ deux) dans ``Leçons apprises''.</p>
 <ul>
 <li>
 <p><a href="https://wiki.archlinux.org/index.php/RAID" class="bare">https://wiki.archlinux.org/index.php/RAID</a></p>
+</li>
+<li>
+<p><a href="20170505-lvm.adoc" class="bare">20170505-lvm.adoc</a></p>
 </li>
 </ul>
 </div>
@@ -652,7 +669,7 @@ var disqus_config = function () {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-11-02 09:18:41 +0100
+Last updated 2020-11-02 09:33:02 +0100
 </div>
 </div>
 <style>

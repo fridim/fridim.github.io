@@ -3,8 +3,9 @@ mddir = .
 GPGkey = 0x0A74F4B1A9903389 # gpg key used to sign .md files
 
 mdfiles = $(shell find $(mddir)/ -name "*.md" ! -iname '*draft*') index.md
-htmlfiles = $(mdfiles:.md=.html)
-signedfiles = $(mdfiles:.md=.md.asc.txt)
+adocfiles = $(shell find $(mddir)/ -name "*.adoc" ! -iname '*draft*') index.md
+htmlfiles = $(mdfiles:.md=.html) $(adocfiles:.adoc=.html)
+signedfiles = $(mdfiles:.md=.md.asc.txt) $(adocfiles:.adoc=.adoc.asc.txt)
 
 # draft only for preview (no push)
 draftmd = $(shell find $(mddir)/ -iname '*draft*md')
@@ -15,6 +16,8 @@ drafthtml = $(draftmd:.md=.html)
 all: $(htmlfiles) $(signedfiles) $(drafthtml)
 
 %.html: SHELL:=/bin/bash
+%.html: %.adoc
+	asciidoctor $<
 %.html: %.md Makefile inc/head.html inc/disqus.html %.md.asc.txt
 	(cat inc/head.html ; \
 		[ -e "inc/$@" ] && cat "inc/$@"; \
