@@ -1,7 +1,7 @@
 = Software i like (and use)
 Guillaume Coré (fridim)
 :icons: font
-:toc2:
+:toc:
 :source-highlighter: coderay
 :description: Software I like
 :keywords: android, linux
