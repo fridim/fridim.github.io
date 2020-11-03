@@ -33,7 +33,7 @@ all: $(htmlfiles) $(signedfiles) $(drafthtml)
 		echo '&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>' ;\
 		cat inc/tail.html) > "$@"
 
-%.md.asc.txt: %.md
+%.asc.txt: %.md
 	@rm -f $@
 	@if grep -q '%%sign%%' $<; then \
           gpg -u $(GPGkey) --clearsign $< ;\
