@@ -112,8 +112,4 @@ deux) dans « Leçons apprises ».
 == Liens
 
 * https://wiki.archlinux.org/index.php/RAID
-* link:20170505-lvm.adoc[]
-
-++++
-include::../inc/disqus.html[]
-++++
+* link:20170505-lvm.adoc[ASCIIDOC source]

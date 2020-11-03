@@ -1,0 +1,39 @@
+= Software i like (and use)
+Guillaume Coré (fridim)
+:icons: font
+:toc2:
+:source-highlighter: coderay
+:description: Software I like
+:keywords: android, linux
+
+== In bulk
+
+* Archlinux (laptop & desktop)
+* Alpine Linux (server)
+* link:https://i3wm.org/[i3wm] to manage my windows
+** link:https://github.com/vivien/i3blocks[i3blocks] status bar
+* link:https://syncthing.net/foundation/[syncthing] to sync files
+
+=== Mobile
+
+* link:https://www.etesync.com/[etesync] to sync contacts, calendar and tasks
+* link:https://syncthing.net/foundation/[syncthing] to sync files
+* link:https://play.google.com/store/apps/details?id=org.shadowice.flocke.andotp[andOTP] for everything 2FA
+* link:https://play.google.com/store/apps/details?id=de.danoeh.antennapod[AntennaPod] for podcasts
+* link:https://play.google.com/store/apps/details?id=com.bandcamp.android[Bandcamp] for music
+* link:https://play.google.com/store/apps/details?id=com.benshistudio[Benshi] image:../images/fr.png[fr] Vidéo pour les enfants (par âge, thème)
+* link:https://play.google.com/store/apps/details?id=com.appxy.tinyscan[Tiny Scanner Pro] to scan documents from the mobile
+
+== Programming
+
+* Golang
+
+== Editor
+
+I use Emacs with link:https://github.com/hlissner/doom-emacs[Doom] framework.
+
+image::../images/2020-11-02_emacs.png[emacs]
+
+Modules:
+
+* link:https://wiki.archlinux.org/index.php/Mediawiki-el[mediawiki.el] — *Very* useful when you have to work with Mediawiki. The web editor is very bad, and working from your editor is a big plus.

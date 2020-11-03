@@ -4,6 +4,7 @@ Guillaume Coré (fridim)
 Blog
 --------
 
+* 2020-11-03 [Software i like](notes/20201103_software_i_like.html)
 * 2017-05-05 [reconstruire raid+lvm sans spare disk](notes/20170505-lvm.html)
 * 2017-04-05 [How to mount qcow2 disk image](notes/mount_qcow2.html)
 * 2016-10-04 [Tor hidden service on Openshift 3](notes/tor_hidden_service_on_openshift_3.html)
