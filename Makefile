@@ -1,11 +1,11 @@
 #  Where the markdown files are
-mddir = .
+mddir = notes
 GPGkey = 0x0A74F4B1A9903389 # gpg key used to sign .md files
 
 mdfiles = $(shell find $(mddir)/ -name "*.md" ! -iname '*draft*') index.md
-adocfiles = $(shell find $(mddir)/ -name "*.adoc" ! -iname '*draft*') index.md
+adocfiles = $(shell find notes/ -name "*.adoc" ! -iname '*draft*')
 htmlfiles = $(mdfiles:.md=.html) $(adocfiles:.adoc=.html)
-signedfiles = $(mdfiles:.md=.md.asc.txt) $(adocfiles:.adoc=.adoc.asc.txt)
+signedfiles = $(mdfiles:.md=.md.asc.txt)
 
 # draft only for preview (no push)
 draftmd = $(shell find $(mddir)/ -iname '*draft*md')
@@ -33,7 +33,7 @@ all: $(htmlfiles) $(signedfiles) $(drafthtml)
 		echo '&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>' ;\
 		cat inc/tail.html) > "$@"
 
-%.asc.txt: %.md
+%.md.asc.txt: %.md
 	@rm -f $@
 	@if grep -q '%%sign%%' $<; then \
           gpg -u $(GPGkey) --clearsign $< ;\
