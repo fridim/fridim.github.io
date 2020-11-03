@@ -16,9 +16,11 @@ drafthtml = $(draftmd:.md=.html)
 all: $(htmlfiles) $(signedfiles) $(drafthtml)
 
 %.html: SHELL:=/bin/bash
-%.html: %.adoc
-	asciidoctor $<
-%.html: %.md Makefile inc/head.html inc/disqus.html %.md.asc.txt
+%.html: %.adoc inc/disqus.adoc
+	cat $< inc/disqus.adoc > $<.tmp
+	asciidoctor -o - $<.tmp > "$@"
+	rm -f $<.tmp
+%.html: %.md Makefile inc/head.html inc/disqus.html
 	(cat inc/head.html ; \
 		[ -e "inc/$@" ] && cat "inc/$@"; \
 		markdown_py -x codehilite <(./toc.rb <(sed '/^%%sign%%/d' $<)) ;\
@@ -29,11 +31,11 @@ all: $(htmlfiles) $(signedfiles) $(drafthtml)
 		fi ;\
 		echo "$(shell date|sed "s/ /\&nbsp;/g")" ;\
 		echo '&nbsp;$$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>' ;\
-		cat inc/tail.html) > $@
+		cat inc/tail.html) > "$@"
 
 %.md.asc.txt: %.md
 	@rm -f $@
-	if grep -q '%%sign%%' $<; then \
+	@if grep -q '%%sign%%' $<; then \
           gpg -u $(GPGkey) --clearsign $< ;\
           mv $<.asc $@ ;\
         fi
