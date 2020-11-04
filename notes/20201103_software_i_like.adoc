@@ -13,6 +13,7 @@ Guillaume Coré (fridim)
 * link:https://i3wm.org/[i3wm] to manage my windows
 ** link:https://github.com/vivien/i3blocks[i3blocks] status bar
 * link:https://syncthing.net/foundation/[syncthing] to sync files
+* link:https://keepassxc.org/[keypassxc] password manager
 
 === Mobile
 
@@ -34,6 +35,8 @@ I use Emacs with link:https://github.com/hlissner/doom-emacs[Doom] framework.
 
 image::../images/2020-11-02_emacs.png[emacs]
 
-Modules:
+Notable modules:
 
 * link:https://wiki.archlinux.org/index.php/Mediawiki-el[mediawiki.el] — *Very* useful when you have to work with Mediawiki. The web editor is very bad, and working from your editor is a big plus.
+
+== Comments ==
