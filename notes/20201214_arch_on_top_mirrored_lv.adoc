@@ -1,0 +1,79 @@
+= Archlinux on top of mirrored LV (raid1)
+Guillaume Coré (fridim)
+:icons: font
+:description: Archlinux on top of mirrored Logical Volume using type mirror (raid1) feature of LVM2
+:keywords: linux, archlinux, grub, mkinitcpio
+
+I struggled to get that working, so i thought it would be worth a quick recipe.
+
+I'm not talking about raid1 on disk with `mdadm` to create mirrored Physical Volume, but rather just use the mirror feature of LVM directly, for convenience.
+
+.Overview
+----
+         +-------------------------------+
+         |       Filestystem  ext4       |
+         |       (archlinux OS)          |
+         +-------------------------------+
+     +-+ +-------------------------------+
+     |   | Logical volume with 1 mirror  |
+     |   | (type raid1)                  |
+     |   +-------------------------------+
+LVM  |
+     |     +--+    +--+   +--+
+     |     |LE|    |LE|   |LE|   ...
+     |     ++-+    +--+   +--+
+     +--+   | |    each LE maps to 2 PE
+            | +------+
+            |        |
+          +-v--+  +--v-+ +----+ +----+
+          |    |  |    | |    | |    |
+          |disk|  |disk| |disk| |disk|
+          |    |  |    | |    | |    |
+          |    |  |    | |    | |    |
+          +----+  +----+ +----+ +----+
+----
+
+. Convert the LV to mirrored LV
++
+----
+lvconvert -m1 vg1/archlinux
+----
+. Watch progress of the synchronization using `lvs` (`Cpy%sync` column). You can also display the Sub LVs and physical volumes used as follow:
++
+----
+# lvs -a -o +devices |grep archlinux
+  LV                   VG  Attr       LSize   Cpy%Sync Devices
+  archlinux            vg1 rwi-aor--- 120.00g 100.00   archlinux_rimage_0(0),archlinux_rimage_1(0)
+  [archlinux_rimage_0] vg1 iwi-aor--- 120.00g          /dev/sdc2(33053)
+  [archlinux_rimage_1] vg1 iwi-aor--- 120.00g          /dev/sda1(1)
+  [archlinux_rmeta_0]  vg1 ewi-aor---   4.00m          /dev/sdc2(33052)
+  [archlinux_rmeta_1]  vg1 ewi-aor---   4.00m          /dev/sda1(0)
+----
+. Edit `/etc/mkinitcpio.conf` check `MODULES` and `HOOKS`
++
+----
+MODULES=(ext4 amdgpu raid1 dm_raid)
+HOOKS=(base udev autodetect modconf block lvm2 mdadm_udev filesystems keyboard fsck)
+----
+. run `mkinitcpio -p linux`
+. If like me you're using GRUB, add the appropriate `insmod` to the menuentry:
++
+----
+menuentry 'archlinux' --class archlinux --class gnu-linux --class gnu --class os $menuentry_id_option 'archlinux' {
+        insmod gzio
+        insmod part_gpt
+        insmod diskfilter
+        insmod lvm
+        insmod mdraid1x
+        insmod ext2
+        set root=(lvm/vg1-archlinux)
+        linux /boot/vmlinuz-linux root=/dev/mapper/vg1-archlinux
+        initrd /boot/initramfs-linux.img
+}
+----
+
+=== links
+
+* link:https://www.linux.org/docs/man7/lvmraid.html[`man 7 lvmraid`]
+* https://wiki.archlinux.org/index.php/Mkinitcpio
+* https://wiki.archlinux.org/index.php/GRUB
