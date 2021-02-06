@@ -42,5 +42,3 @@ image::../images/2020-11-02_emacs.png[emacs]
 Notable modules:
 
 * link:https://wiki.archlinux.org/index.php/Mediawiki-el[mediawiki.el] — *Very* useful when you have to work with Mediawiki. The web editor is very bad, and working from your editor is a big plus.
-
-== Comments ==
