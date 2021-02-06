@@ -14,17 +14,19 @@ drafthtml = $(draftmd:.md=.html)
 .PHONY: all push
 
 all: $(htmlfiles) $(signedfiles) $(drafthtml)
+EnableDisqus = false
 
 %.html: SHELL:=/bin/bash
 %.html: %.adoc inc/disqus.adoc
-	cat $< inc/disqus.adoc > $<.tmp
+	cp $< $<.tmp
+	if [ $(EnableDisqus) = true ]; then cat inc/disqus.adoc >> $<.tmp; fi
 	asciidoctor -o - $<.tmp > "$@"
 	rm -f $<.tmp
 %.html: %.md Makefile inc/head.html inc/disqus.html
 	(cat inc/head.html ; \
 		[ -e "inc/$@" ] && cat "inc/$@"; \
 		markdown_py -x codehilite <(./toc.rb <(sed '/^%%sign%%/d' $<)) ;\
-		[ "$@" != "index.html" ] && cat inc/disqus.html ;\
+		[ $(EnableDisqus) = true ] && [ "$@" != "index.html" ] && cat inc/disqus.html ;\
 		echo '<hr /><div id="footer">$$&nbsp;from&nbsp;<a href="../$<">$<</a>&nbsp;';\
 		if [ -e $<.asc.txt ]; then \
 		  echo '(<a href="/$<.asc.txt">GPG sig</a>)&nbsp;' ;\
