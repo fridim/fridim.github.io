@@ -4,6 +4,7 @@ Guillaume Coré (fridim)
 Blog
 --------
 
+* 2022-09-25 [Software i like](notes/20201103_software_i_like.html) updated
 * 2020-12-14 [Archlinux on top of mirrored LV](notes/20201214_arch_on_top_mirrored_lv.html)
 * 2020-11-03 [Software i like](notes/20201103_software_i_like.html)
 * 2017-05-05 [reconstruire raid+lvm sans spare disk](notes/20170505-lvm.html)
