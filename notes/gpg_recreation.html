@@ -261,15 +261,15 @@ systemctl daemon-reload
 <p><a id='toc-id-7' /></p>
 <h3>Exporter et importer</h3>
 <p>On peut utiliser une clef USB ou une carte SD pour faire passer les clefs et signatures depuis ou vers la machine offline. Copier sur la clef uniquement les subkeys et la partie publique de la masterkey. Sur le système connecté, vérifier la présence de <code>sec#</code> :</p>
-<div class="codehilite"><pre><span></span><code><span class="c">plop:/$ gpg --list-secret-key</span>
-<span class="err">/home/fridim/.gnupg/pubring.kbx</span>
-<span class="err">-------------------------------</span>
-<span class="err">sec#  rsa3936/0x0A74F4B1A9903389 2015-05-22 [expires: 2016-05-21]</span>
-<span class="err">uid                 [ unknown] Guillaume Coré &lt;fridim@onfi.re&gt;</span>
-<span class="err">uid                 [ unknown] Guillaume Coré (fridim) &lt;gucore@redhat.com&gt;</span>
-<span class="err">uid                 [ unknown] Guillaume Coré (fridim) &lt;guillaume.core@gmail.com&gt;</span>
-<span class="err">ssb   rsa4096/0x2C90D3E4573FD8DE 2015-05-22 [expires: 2016-05-21]</span>
-<span class="err">ssb   rsa4096/0x76F17D8B22049114 2015-05-22 [expires: 2016-05-21]</span>
+<div class="codehilite"><pre><span></span><code><span class="nl">plop</span><span class="p">:</span><span class="o">/</span><span class="err">$</span><span class="w"> </span><span class="n">gpg</span><span class="w"> </span><span class="o">--</span><span class="n">list</span><span class="o">-</span><span class="n">secret</span><span class="o">-</span><span class="k">key</span><span class="w"></span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">fridim</span><span class="o">/</span><span class="p">.</span><span class="n">gnupg</span><span class="o">/</span><span class="n">pubring</span><span class="p">.</span><span class="n">kbx</span><span class="w"></span>
+<span class="o">-------------------------------</span><span class="w"></span>
+<span class="n">sec</span><span class="err">#</span><span class="w">  </span><span class="n">rsa3936</span><span class="o">/</span><span class="mh">0x0A74F4B1A9903389</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n"> unknown</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="o">&lt;</span><span class="n">fridim</span><span class="nv">@onfi</span><span class="p">.</span><span class="n">re</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n"> unknown</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="p">(</span><span class="n">fridim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="n">gucore</span><span class="nv">@redhat</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">uid</span><span class="w">                 </span><span class="o">[</span><span class="n"> unknown</span><span class="o">]</span><span class="w"> </span><span class="n">Guillaume</span><span class="w"> </span><span class="n">Coré</span><span class="w"> </span><span class="p">(</span><span class="n">fridim</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="n">guillaume</span><span class="p">.</span><span class="n">core</span><span class="nv">@gmail</span><span class="p">.</span><span class="n">com</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">ssb</span><span class="w">   </span><span class="n">rsa4096</span><span class="o">/</span><span class="mh">0x2C90D3E4573FD8DE</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
+<span class="n">ssb</span><span class="w">   </span><span class="n">rsa4096</span><span class="o">/</span><span class="mh">0x76F17D8B22049114</span><span class="w"> </span><span class="mi">2015</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">22</span><span class="w"> </span><span class="o">[</span><span class="n">expires: 2016-05-21</span><span class="o">]</span><span class="w"></span>
 </code></pre></div>
 
 <p>Pour les unknow il faut en effet mettre à jour les trusts de la clef puisqu'on l'a importée :</p>
@@ -300,9 +300,9 @@ gpg2 -u 3A69792B0483A324 --sign-key 0A74F4B1A9903389
 </li>
 <li>
 <p>Signer le statement avec l'ancienne et la nouvelle clef. Pour ça il faut importer son ancienne clef privée sur la machine offline. La signature du transition statement se fait sur la machine offline.</p>
-<div class="codehilite"><pre><span></span><code><span class="err">gpg2 --local-user &lt;NOUVELLE&gt;! --local-user &lt;ANCIENNE&gt; --clearsign transition_statement.txt</span>
-<span class="err"># dans mon cas :</span>
-<span class="err">gpg2 --local-user A9903389! --local-user 0483A324 --clearsign transition_statement.txt</span>
+<div class="codehilite"><pre><span></span><code>gpg2 --local-user &lt;NOUVELLE&gt;! --local-user &lt;ANCIENNE&gt; --clearsign transition_statement.txt
+# dans mon cas :
+gpg2 --local-user A9903389! --local-user 0483A324 --clearsign transition_statement.txt
 </code></pre></div>
 
 </li>
@@ -347,7 +347,7 @@ gpg2 -u 3A69792B0483A324 --sign-key 0A74F4B1A9903389
 <li><a href="https://www.debian-administration.org/users/dkg/weblog/97">about Comment in user ID</a></li>
 </ul><hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/gpg_recreation.md">notes/gpg_recreation.md</a>&nbsp;
 (<a href="/notes/gpg_recreation.md.asc.txt">GPG sig</a>)&nbsp;
-Sat&nbsp;Feb&nbsp;&nbsp;6&nbsp;08:08:49&nbsp;AM&nbsp;CET&nbsp;2021
+Mon&nbsp;Oct&nbsp;&nbsp;3&nbsp;04:06:52&nbsp;PM&nbsp;CEST&nbsp;2022
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 
   </div>

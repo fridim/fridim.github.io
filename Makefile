@@ -22,6 +22,7 @@ EnableDisqus = false
 	if [ $(EnableDisqus) = true ]; then cat inc/disqus.adoc >> $<.tmp; fi
 	asciidoctor -o - $<.tmp > "$@"
 	rm -f $<.tmp
+
 %.html: %.md Makefile inc/head.html inc/disqus.html
 	(cat inc/head.html ; \
 		[ -e "inc/$@" ] && cat "inc/$@"; \

@@ -34,11 +34,11 @@ rmmod nbd
 <p>You can safely mount RW if the image is not used by a VM, or VM is stopped. It can be a quick alternative to <a href="http://libguestfs.org/virt-customize.1.html">virt-customize</a> if you need to make simple modifications on an image.</p>
 <h2>Kernel module ?</h2>
 <p>I just came across this <a href="https://upcommons.upc.edu/bitstream/handle/2099.1/9619/65757.pdf">paper</a>. The guy created a kernel module, qloop to use a qcow2 image directly like a block device.</p>
-<div class="codehilite"><pre><span></span><code><span class="err">losetup /dev/qloop0 file.qcow2</span>
+<div class="codehilite"><pre><span></span><code>losetup /dev/qloop0 file.qcow2
 </code></pre></div>
 
 <p>That is all. Now, the device file <code>/dev/qloop0</code> will behave like a block device containing all the data in the disk described in file.qcow2.</p>
-<div class="codehilite"><pre><span></span><code><span class="err">losetup -d /dev/qloop0 #when done</span>
+<div class="codehilite"><pre><span></span><code>losetup -d /dev/qloop0 #when done
 </code></pre></div>
 
 <p>The paper also summaries all the current methods to mount qcow2 image and even if it's from 2010, it's still worth mentioning.</p>
@@ -57,7 +57,7 @@ rmmod nbd
 <li><a href="http://libguestfs.org/virt-customize.1.html">virt-customize</a></li>
 <li><a href="http://libguestfs.org/virt-builder.1.html">virt-builder</a></li>
 </ul><hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/mount_qcow2.md">notes/mount_qcow2.md</a>&nbsp;
-Sat&nbsp;Feb&nbsp;&nbsp;6&nbsp;08:08:50&nbsp;AM&nbsp;CET&nbsp;2021
+Mon&nbsp;Oct&nbsp;&nbsp;3&nbsp;04:06:54&nbsp;PM&nbsp;CEST&nbsp;2022
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 
   </div>

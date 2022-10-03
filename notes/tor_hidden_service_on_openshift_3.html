@@ -87,7 +87,7 @@ At the end, i'll try to summarize everything into a template.</p>
 <p><a id='toc-id-0' /></p>
 <h2>The Application</h2>
 <p>In this exercise i do not care about the app at all, so i just run :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc new-app centos/ruby-22-centos7~https://github.com/openshift/ruby-ex.git</span>
+<div class="codehilite"><pre><span></span><code>oc new-app centos/ruby-22-centos7~https://github.com/openshift/ruby-ex.git
 </code></pre></div>
 
 <p>It creates pods and a <code>ruby-ex</code> service i'll route later via Tor.</p>
@@ -111,43 +111,43 @@ with an hidden service configured pointing to your openshift service.</p>
 <p>You should see the docker build and the final push to the registry. Then a pod onionshift-... should be running.</p>
 <p>Tor will create a private_key and hostname in the directory specified by <code>HiddenServiceDir</code>.</p>
 <p>Check the logs :</p>
-<div class="codehilite"><pre><span></span><code><span class="o">$</span> <span class="n">oc</span> <span class="n">logs</span> <span class="n">tor</span><span class="o">-</span><span class="mi">7</span><span class="o">-</span><span class="n">buxlt</span>
-<span class="o">+</span> <span class="n">cd</span> <span class="o">/</span><span class="n">data</span>
-<span class="o">+</span> <span class="k">export</span> <span class="n">SERVICE_NAME</span><span class="o">=</span><span class="n">ruby</span><span class="o">-</span><span class="n">ex</span>
-<span class="o">+</span> <span class="n">SERVICE_NAME</span><span class="o">=</span><span class="n">ruby</span><span class="o">-</span><span class="n">ex</span>
-<span class="o">+</span> <span class="k">export</span> <span class="n">SERVICE_PORT</span><span class="o">=</span><span class="mi">8080</span>
-<span class="o">+</span> <span class="n">SERVICE_PORT</span><span class="o">=</span><span class="mi">8080</span>
-<span class="o">+</span> <span class="k">export</span> <span class="n">HS_PORT</span><span class="o">=</span><span class="mi">80</span>
-<span class="o">+</span> <span class="n">HS_PORT</span><span class="o">=</span><span class="mi">80</span>
-<span class="o">+</span> <span class="s1">&#39;[&#39;</span> <span class="s1">&#39;!&#39;</span> <span class="o">-</span><span class="n">e</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">torrc</span> <span class="s1">&#39;]&#39;</span>
-<span class="o">+</span> <span class="n">envsubst</span>
-<span class="o">+</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">tor</span> <span class="o">-</span><span class="n">f</span> <span class="n">torrc</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Tor</span> <span class="n">v0</span><span class="o">.</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">7</span> <span class="n">running</span> <span class="n">on</span> <span class="n">Linux</span> <span class="n">with</span> <span class="n">Libevent</span> <span class="mf">2.0</span><span class="o">.</span><span class="mi">22</span><span class="o">-</span><span class="n">stable</span><span class="p">,</span> <span class="n">OpenSSL</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">2j</span> <span class="ow">and</span> <span class="n">Zlib</span> <span class="mf">1.2</span><span class="o">.</span><span class="mf">8.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Tor</span> <span class="n">can</span><span class="s1">&#39;t help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Read</span> <span class="n">configuration</span> <span class="n">file</span> <span class="s2">&quot;/data/torrc&quot;</span><span class="o">.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.107</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Wow</span><span class="o">!</span>  <span class="n">I</span> <span class="n">detected</span> <span class="n">that</span> <span class="n">you</span> <span class="n">have</span> <span class="mi">24</span> <span class="n">CPUs</span><span class="o">.</span> <span class="n">I</span> <span class="n">will</span> <span class="ow">not</span> <span class="n">autodetect</span> <span class="n">any</span> <span class="n">more</span> <span class="n">than</span> <span class="mi">16</span><span class="p">,</span> <span class="n">though</span><span class="o">.</span>  <span class="n">If</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">configure</span> <span class="n">more</span><span class="p">,</span> <span class="n">set</span> <span class="n">NumCPUs</span> <span class="ow">in</span> <span class="n">your</span> <span class="n">torrc</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.107</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Opening</span> <span class="n">Socks</span> <span class="n">listener</span> <span class="n">on</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">9050</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Parsing</span> <span class="n">GEOIP</span> <span class="n">IPv4</span> <span class="n">file</span> <span class="o">//</span><span class="n">share</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">geoip</span><span class="o">.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Parsing</span> <span class="n">GEOIP</span> <span class="n">IPv6</span> <span class="n">file</span> <span class="o">//</span><span class="n">share</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">geoip6</span><span class="o">.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">0</span><span class="o">%</span><span class="p">:</span> <span class="n">Starting</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">5</span><span class="o">%</span><span class="p">:</span> <span class="n">Connecting</span> <span class="n">to</span> <span class="n">directory</span> <span class="n">server</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">10</span><span class="o">%</span><span class="p">:</span> <span class="n">Finishing</span> <span class="n">handshake</span> <span class="n">with</span> <span class="n">directory</span> <span class="n">server</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">15</span><span class="o">%</span><span class="p">:</span> <span class="n">Establishing</span> <span class="n">an</span> <span class="n">encrypted</span> <span class="n">directory</span> <span class="n">connection</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">20</span><span class="o">%</span><span class="p">:</span> <span class="n">Asking</span> <span class="k">for</span> <span class="n">networkstatus</span> <span class="n">consensus</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">25</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">networkstatus</span> <span class="n">consensus</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">I</span> <span class="n">learned</span> <span class="n">some</span> <span class="n">more</span> <span class="n">directory</span> <span class="n">information</span><span class="p">,</span> <span class="n">but</span> <span class="ow">not</span> <span class="n">enough</span> <span class="n">to</span> <span class="n">build</span> <span class="n">a</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">We</span> <span class="n">have</span> <span class="n">no</span> <span class="n">usable</span> <span class="n">consensus</span><span class="o">.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">40</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">authority</span> <span class="n">key</span> <span class="n">certs</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">45</span><span class="o">%</span><span class="p">:</span> <span class="n">Asking</span> <span class="k">for</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">I</span> <span class="n">learned</span> <span class="n">some</span> <span class="n">more</span> <span class="n">directory</span> <span class="n">information</span><span class="p">,</span> <span class="n">but</span> <span class="ow">not</span> <span class="n">enough</span> <span class="n">to</span> <span class="n">build</span> <span class="n">a</span> <span class="n">circuit</span><span class="p">:</span> <span class="n">We</span> <span class="n">need</span> <span class="n">more</span> <span class="n">microdescriptors</span><span class="p">:</span> <span class="n">we</span> <span class="n">have</span> <span class="mi">0</span><span class="o">/</span><span class="mi">7187</span><span class="p">,</span> <span class="ow">and</span> <span class="n">can</span> <span class="n">only</span> <span class="n">build</span> <span class="mi">0</span><span class="o">%</span> <span class="n">of</span> <span class="n">likely</span> <span class="n">paths</span><span class="o">.</span> <span class="p">(</span><span class="n">We</span> <span class="n">have</span> <span class="mi">0</span><span class="o">%</span> <span class="n">of</span> <span class="n">guards</span> <span class="n">bw</span><span class="p">,</span> <span class="mi">0</span><span class="o">%</span> <span class="n">of</span> <span class="n">midpoint</span> <span class="n">bw</span><span class="p">,</span> <span class="ow">and</span> <span class="mi">0</span><span class="o">%</span> <span class="n">of</span> <span class="n">exit</span> <span class="n">bw</span> <span class="o">=</span> <span class="mi">0</span><span class="o">%</span> <span class="n">of</span> <span class="n">path</span> <span class="n">bw</span><span class="o">.</span><span class="p">)</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">50</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">56</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">62</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">67</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">75</span><span class="o">%</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">relay</span> <span class="n">descriptors</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">80</span><span class="o">%</span><span class="p">:</span> <span class="n">Connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">Tor</span> <span class="n">network</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">90</span><span class="o">%</span><span class="p">:</span> <span class="n">Establishing</span> <span class="n">a</span> <span class="n">Tor</span> <span class="n">circuit</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">43.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Tor</span> <span class="n">has</span> <span class="n">successfully</span> <span class="n">opened</span> <span class="n">a</span> <span class="n">circuit</span><span class="o">.</span> <span class="n">Looks</span> <span class="n">like</span> <span class="n">client</span> <span class="n">functionality</span> <span class="k">is</span> <span class="n">working</span><span class="o">.</span>
-<span class="n">Sep</span> <span class="mi">29</span> <span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">43.000</span> <span class="p">[</span><span class="n">notice</span><span class="p">]</span> <span class="n">Bootstrapped</span> <span class="mi">100</span><span class="o">%</span><span class="p">:</span> <span class="n">Done</span>
+<div class="codehilite"><pre><span></span><code><span class="o">$</span><span class="w"> </span><span class="n">oc</span><span class="w"> </span><span class="n">logs</span><span class="w"> </span><span class="n">tor</span><span class="o">-</span><span class="mi">7</span><span class="o">-</span><span class="n">buxlt</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="n">cd</span><span class="w"> </span><span class="o">/</span><span class="n">data</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="k">export</span><span class="w"> </span><span class="n">SERVICE_NAME</span><span class="o">=</span><span class="n">ruby</span><span class="o">-</span><span class="n">ex</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="n">SERVICE_NAME</span><span class="o">=</span><span class="n">ruby</span><span class="o">-</span><span class="n">ex</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="k">export</span><span class="w"> </span><span class="n">SERVICE_PORT</span><span class="o">=</span><span class="mi">8080</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="n">SERVICE_PORT</span><span class="o">=</span><span class="mi">8080</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="k">export</span><span class="w"> </span><span class="n">HS_PORT</span><span class="o">=</span><span class="mi">80</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="n">HS_PORT</span><span class="o">=</span><span class="mi">80</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="s1">&#39;[&#39;</span><span class="w"> </span><span class="s1">&#39;!&#39;</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">torrc</span><span class="w"> </span><span class="s1">&#39;]&#39;</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="n">envsubst</span><span class="w"></span>
+<span class="o">+</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">tor</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">torrc</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Tor</span><span class="w"> </span><span class="n">v0</span><span class="o">.</span><span class="mf">2.8</span><span class="o">.</span><span class="mi">7</span><span class="w"> </span><span class="n">running</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">Linux</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">Libevent</span><span class="w"> </span><span class="mf">2.0</span><span class="o">.</span><span class="mi">22</span><span class="o">-</span><span class="n">stable</span><span class="p">,</span><span class="w"> </span><span class="n">OpenSSL</span><span class="w"> </span><span class="mf">1.0</span><span class="o">.</span><span class="mi">2j</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Zlib</span><span class="w"> </span><span class="mf">1.2</span><span class="o">.</span><span class="mf">8.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Tor</span><span class="w"> </span><span class="n">can</span><span class="s1">&#39;t help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning</span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.101</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Read</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="s2">&quot;/data/torrc&quot;</span><span class="o">.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.107</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Wow</span><span class="o">!</span><span class="w">  </span><span class="n">I</span><span class="w"> </span><span class="n">detected</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="mi">24</span><span class="w"> </span><span class="n">CPUs</span><span class="o">.</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">autodetect</span><span class="w"> </span><span class="n">any</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">than</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="n">though</span><span class="o">.</span><span class="w">  </span><span class="n">If</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">want</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">configure</span><span class="w"> </span><span class="n">more</span><span class="p">,</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">NumCPUs</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">torrc</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.107</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Opening</span><span class="w"> </span><span class="n">Socks</span><span class="w"> </span><span class="n">listener</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">9050</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Parsing</span><span class="w"> </span><span class="n">GEOIP</span><span class="w"> </span><span class="n">IPv4</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">//</span><span class="n">share</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">geoip</span><span class="o">.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Parsing</span><span class="w"> </span><span class="n">GEOIP</span><span class="w"> </span><span class="n">IPv6</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">//</span><span class="n">share</span><span class="o">/</span><span class="n">tor</span><span class="o">/</span><span class="n">geoip6</span><span class="o">.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">40.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Starting</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">5</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Connecting</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">server</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">10</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Finishing</span><span class="w"> </span><span class="n">handshake</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">server</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">15</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Establishing</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">connection</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">20</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Asking</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">networkstatus</span><span class="w"> </span><span class="n">consensus</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">25</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">networkstatus</span><span class="w"> </span><span class="n">consensus</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="n">learned</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">information</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">enough</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">build</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">circuit</span><span class="p">:</span><span class="w"> </span><span class="n">We</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">usable</span><span class="w"> </span><span class="n">consensus</span><span class="o">.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">40</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">authority</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="n">certs</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">45</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Asking</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">I</span><span class="w"> </span><span class="n">learned</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">information</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">enough</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">build</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">circuit</span><span class="p">:</span><span class="w"> </span><span class="n">We</span><span class="w"> </span><span class="n">need</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">microdescriptors</span><span class="p">:</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="mi">0</span><span class="o">/</span><span class="mi">7187</span><span class="p">,</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">build</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">likely</span><span class="w"> </span><span class="n">paths</span><span class="o">.</span><span class="w"> </span><span class="p">(</span><span class="n">We</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">guards</span><span class="w"> </span><span class="n">bw</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">midpoint</span><span class="w"> </span><span class="n">bw</span><span class="p">,</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">exit</span><span class="w"> </span><span class="n">bw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">%</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="n">bw</span><span class="o">.</span><span class="p">)</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">41.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">50</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">56</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">62</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">67</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">75</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Loading</span><span class="w"> </span><span class="n">relay</span><span class="w"> </span><span class="n">descriptors</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">80</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Connecting</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">Tor</span><span class="w"> </span><span class="n">network</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">42.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">90</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Establishing</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">Tor</span><span class="w"> </span><span class="n">circuit</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">43.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Tor</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">successfully</span><span class="w"> </span><span class="n">opened</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">circuit</span><span class="o">.</span><span class="w"> </span><span class="n">Looks</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="n">functionality</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">working</span><span class="o">.</span><span class="w"></span>
+<span class="n">Sep</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">05</span><span class="p">:</span><span class="mf">43.000</span><span class="w"> </span><span class="p">[</span><span class="n">notice</span><span class="p">]</span><span class="w"> </span><span class="n">Bootstrapped</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="p">:</span><span class="w"> </span><span class="n">Done</span><span class="w"></span>
 </code></pre></div>
 
 <p>Grab the .onion address:</p>
@@ -185,40 +185,40 @@ HiddenServicePort <span class="m">80</span> ruby-ex:8080
 </code></pre></div>
 
 <p>Add this file to the project as a configMap:</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create configmap torrc \</span>
-<span class="err">--from-file=torrc</span>
+<div class="codehilite"><pre><span></span><code>oc create configmap torrc \
+--from-file=torrc
 </code></pre></div>
 
 <p>Check if it's OK, mine looks like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="p p-Indicator">[</span><span class="nv">fridim@master onionshift</span><span class="p p-Indicator">]</span><span class="l l-Scalar l-Scalar-Plain">$ oc get configmap -o yaml</span>
-<span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="nt">items</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-  <span class="nt">data</span><span class="p">:</span>
-    <span class="nt">torrc</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-      <span class="no">### /etc/torrc ###</span>
-      <span class="no"># https://www.torproject.org/docs/tor-manual.html.en</span>
+<div class="codehilite"><pre><span></span><code><span class="p p-Indicator">[</span><span class="nv">fridim@master onionshift</span><span class="p p-Indicator">]</span><span class="l l-Scalar l-Scalar-Plain">$ oc get configmap -o yaml</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">apiVersion</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">data</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">torrc</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">### /etc/torrc ###</span><span class="w"></span>
+<span class="w">      </span><span class="no"># https://www.torproject.org/docs/tor-manual.html.en</span><span class="w"></span>
 
-      <span class="no"># CONFIGURE THIS BEFORE RUNNING TOR!</span>
+<span class="w">      </span><span class="no"># CONFIGURE THIS BEFORE RUNNING TOR!</span><span class="w"></span>
 
-      <span class="no">DataDirectory /data/tor</span>
+<span class="w">      </span><span class="no">DataDirectory /data/tor</span><span class="w"></span>
 
-      <span class="no">HiddenServiceDir /data/tor/hidden_service/</span>
-      <span class="no">HiddenServicePort 80 ruby-ex:8080</span>
-  <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
-  <span class="nt">metadata</span><span class="p">:</span>
-    <span class="nt">creationTimestamp</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2016-09-22T16:10:50Z</span>
-    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torrc</span>
-    <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tor-hidden-service</span>
-    <span class="nt">resourceVersion</span><span class="p">:</span> <span class="s">&quot;1419464&quot;</span>
-    <span class="nt">selfLink</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/api/v1/namespaces/tor-hidden-service/configmaps/torrc</span>
-    <span class="nt">uid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2129fb99-80df-11e6-a17e-ac162d7c2550</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">List</span>
-<span class="nt">metadata</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<span class="w">      </span><span class="no">HiddenServiceDir /data/tor/hidden_service/</span><span class="w"></span>
+<span class="w">      </span><span class="no">HiddenServicePort 80 ruby-ex:8080</span><span class="w"></span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
+<span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">creationTimestamp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2016-09-22T16:10:50Z</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torrc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tor-hidden-service</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resourceVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1419464&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">selfLink</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/api/v1/namespaces/tor-hidden-service/configmaps/torrc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2129fb99-80df-11e6-a17e-ac162d7c2550</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">List</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
 </code></pre></div>
 
 <p>Then add a volume from this configMap :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc volume dc/onionshift --add --type=configMap --configmap-name=torrc -m /etc/tor</span>
+<div class="codehilite"><pre><span></span><code>oc volume dc/onionshift --add --type=configMap --configmap-name=torrc -m /etc/tor
 </code></pre></div>
 
 <p>DeploymentConfig update triggers re-deployment and creates a new pod with the new torrc conf.</p>
@@ -252,7 +252,7 @@ secret <span class="s2">&quot;privatekey&quot;</span> created
 <p><a href="https://github.com/fridim/onionshift/blob/master/tor-entrypoint.sh">tor-entrypoint.sh</a> will move the key to <code>/data/tor/hidden_service/private_key</code> so you can let the filename in import/ be the secret name (you don't need to edit the deployment config to set <code>.secret.items[].path</code> to <code>private_key</code>).</p>
 <p>There you go, .onion address will last across pod deletion/creation.</p>
 <p>You can scale UP the pod number of replicas, tor daemons will share the same key and clients will be dispatched randomly to tor instances (not equally, see this <a href="https://www.benthamsgaze.org/wp-content/uploads/2015/11/sucu-torscaling.pdf">paper</a>).</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc scale --replicas=2 dc onionshift</span>
+<div class="codehilite"><pre><span></span><code>oc scale --replicas=2 dc onionshift
 </code></pre></div>
 
 <p>You can go up to 6 I think.</p>
@@ -262,7 +262,7 @@ secret <span class="s2">&quot;privatekey&quot;</span> created
 <h3>Create more tor instances</h3>
 <p>For now we have one persistent .onion with several tor instances registering to HSDir at different moments, so clients are load-balanced to those pods.</p>
 <p>Let's create another bunch of tor pod with another key in order to use onionbalance. For that, just  edit the current deploymentConfig</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc edit dc</span>
+<div class="codehilite"><pre><span></span><code>oc edit dc
 </code></pre></div>
 
 <ul>
@@ -271,62 +271,62 @@ secret <span class="s2">&quot;privatekey&quot;</span> created
 <li>Remove the volumes as we didn't create the privatekey yet.</li>
 </ul>
 <p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="nn">---</span>
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DeploymentConfig</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">annotations</span><span class="p">:</span>
-    <span class="nt">openshift.io/generated-by</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OpenShiftNewApp</span>
-  <span class="nt">labels</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
-<span class="nt">spec</span><span class="p">:</span>
-  <span class="nt">strategy</span><span class="p">:</span>
-    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Rolling</span>
-  <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
-  <span class="nt">selector</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
-    <span class="nt">deploymentconfig</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
-  <span class="nt">template</span><span class="p">:</span>
-    <span class="nt">metadata</span><span class="p">:</span>
-      <span class="nt">annotations</span><span class="p">:</span>
-        <span class="nt">openshift.io/generated-by</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Hand</span>
-      <span class="nt">creationTimestamp</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
-      <span class="nt">labels</span><span class="p">:</span>
-        <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift</span>
-        <span class="nt">deploymentconfig</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
-    <span class="nt">spec</span><span class="p">:</span>
-      <span class="nt">containers</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">env</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SERVICE_NAME</span>
-          <span class="nt">value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ruby-ex</span>
-        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SERVICE_PORT</span>
-          <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;8080&quot;</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-        <span class="nt">imagePullPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
-        <span class="nt">terminationMessagePath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/termination-log</span>
-        <span class="nt">volumeMounts</span><span class="p">:</span>
-        <span class="c1">#- mountPath: /data/import</span>
-        <span class="c1">#  name: volume-eg9ol</span>
-      <span class="nt">dnsPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterFirst</span>
-      <span class="nt">restartPolicy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Always</span>
-      <span class="nt">securityContext</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
-      <span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30</span>
-      <span class="nt">volumes</span><span class="p">:</span>
-      <span class="c1">#- name: volume-eg9ol</span>
-        <span class="c1">#secret:</span>
-          <span class="c1">#secretName: privatekey</span>
-  <span class="nt">triggers</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ConfigChange</span>
-  <span class="p p-Indicator">-</span> <span class="nt">imageChangeParams</span><span class="p">:</span>
-      <span class="nt">automatic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-      <span class="nt">containerNames</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">onionshift2</span>
-      <span class="nt">from</span><span class="p">:</span>
-        <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageChange</span>
+<div class="codehilite"><pre><span></span><code><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeploymentConfig</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">openshift.io/generated-by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OpenShiftNewApp</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift2</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">strategy</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rolling</span><span class="w"></span>
+<span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift</span><span class="w"></span>
+<span class="w">    </span><span class="nt">deploymentconfig</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">openshift.io/generated-by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hand</span><span class="w"></span>
+<span class="w">      </span><span class="nt">creationTimestamp</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"></span>
+<span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift</span><span class="w"></span>
+<span class="w">        </span><span class="nt">deploymentconfig</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SERVICE_NAME</span><span class="w"></span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruby-ex</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SERVICE_PORT</span><span class="w"></span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8080&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift2</span><span class="w"></span>
+<span class="w">        </span><span class="nt">terminationMessagePath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/termination-log</span><span class="w"></span>
+<span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="c1">#- mountPath: /data/import</span><span class="w"></span>
+<span class="w">        </span><span class="c1">#  name: volume-eg9ol</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dnsPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterFirst</span><span class="w"></span>
+<span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
+<span class="w">      </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">      </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1">#- name: volume-eg9ol</span><span class="w"></span>
+<span class="w">        </span><span class="c1">#secret:</span><span class="w"></span>
+<span class="w">          </span><span class="c1">#secretName: privatekey</span><span class="w"></span>
+<span class="w">  </span><span class="nt">triggers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigChange</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">imageChangeParams</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">automatic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">containerNames</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift2</span><span class="w"></span>
+<span class="w">      </span><span class="nt">from</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageChange</span><span class="w"></span>
 </code></pre></div>
 
 <p>rsync the key of one of the pod :</p>
@@ -355,12 +355,12 @@ secret <span class="s2">&quot;privatekey&quot;</span> created
 <li>onionbalance</li>
 </ul>
 <p>This time, the <a href="http://onionbalance.readthedocs.io/en/latest/getting-started.html">configuration</a> is:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">DataDirectory</span> <span class="o">/</span><span class="k">data</span><span class="o">/</span><span class="n">tor</span>
+<div class="codehilite"><pre><span></span><code>DataDirectory /data/tor
 
-<span class="n">ControlPort</span> <span class="mi">9051</span>
-<span class="n">CookieAuthentication</span> <span class="mi">1</span>
-<span class="n">CookieAuthFile</span> <span class="o">/</span><span class="k">data</span><span class="o">/</span><span class="n">shared</span><span class="o">/</span><span class="n">control_auth_cookie</span>
-<span class="n">SocksPort</span> <span class="mi">0</span>
+ControlPort 9051
+CookieAuthentication 1
+CookieAuthFile /data/shared/control_auth_cookie
+SocksPort 0
 </code></pre></div>
 
 <div class='warning'>
@@ -373,7 +373,7 @@ Otherwise the container will exit as soon as tor tries to daemonize.
 
 <p><code>CookieAuthFile /data/shared/control_auth_cookie</code> is to place the shared cookie in a shared volume (<strong>emptyDir</strong>) between containers of the pod. We cannot just mount emptyDir volume to <code>/data/tor</code> directly because ownership would then be root:USER and tor does not allow uid of file to be different from the user running tor. For information why permission and ownership are handled the way they are in emptyDir: see <a href="https://github.com/kubernetes/kubernetes/issues/2630">this kubernetes issue</a>.</p>
 <p>Create a configMap from this configuration :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create configmap torrc-balance --from-file torrc-balance</span>
+<div class="codehilite"><pre><span></span><code>oc create configmap torrc-balance --from-file torrc-balance
 </code></pre></div>
 
 <p><a id='toc-id-10' /></p>
@@ -388,11 +388,11 @@ docker run fridim/onionshift /bin/sh -c <span class="s1">&#39;cd /tmp &amp;&amp;
 
 <p>This will output a new RSA key and its .onion associated, to use with the tor instance and onionbalance.</p>
 <p>If you do not need to know the .onion yet, you can simply run:</p>
-<div class="codehilite"><pre><span></span><code><span class="err">openssl genrsa 1024 &gt; private.key</span>
+<div class="codehilite"><pre><span></span><code>openssl genrsa 1024 &gt; private.key
 </code></pre></div>
 
 <p>Save the key and create the secret, ex :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create secret generic bl2eo4cvuyrcd47v.key --from-file=./bl2eo4cvuyrcd47v.key</span>
+<div class="codehilite"><pre><span></span><code>oc create secret generic bl2eo4cvuyrcd47v.key --from-file=./bl2eo4cvuyrcd47v.key
 </code></pre></div>
 
 <p>List the .onion to be load-balanced, for example :</p>
@@ -403,90 +403,90 @@ akz77e4fe6c5iwbf.onion
 
 <p>(you may need to adapt this depending on your names, labels, ...)</p>
 <p>create onionbalance config.yaml :</p>
-<div class="codehilite"><pre><span></span><code><span class="nt">TOR_ADDRESS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
-<span class="nt">TOR_PORT</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">9051</span>
-<span class="nt">STATUS_SOCKET_LOCATION</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/onionbalance/control</span>
-<span class="nt">services</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="nt">instances</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jwe3ybar7layfbhc.onion</span>
-  <span class="p p-Indicator">-</span> <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">akz77e4fe6c5iwbf.onion</span>
-  <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.key</span>
+<div class="codehilite"><pre><span></span><code><span class="nt">TOR_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span><span class="w"></span>
+<span class="nt">TOR_PORT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9051</span><span class="w"></span>
+<span class="nt">STATUS_SOCKET_LOCATION</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/onionbalance/control</span><span class="w"></span>
+<span class="nt">services</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">instances</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jwe3ybar7layfbhc.onion</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">akz77e4fe6c5iwbf.onion</span><span class="w"></span>
+<span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.key</span><span class="w"></span>
 </code></pre></div>
 
 <p>Create the configmap from it :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create configmap bl2eo4cvuyrcd47v.conf --from-file=./bl2eo4cvuyrcd47v.conf</span>
+<div class="codehilite"><pre><span></span><code>oc create configmap bl2eo4cvuyrcd47v.conf --from-file=./bl2eo4cvuyrcd47v.conf
 </code></pre></div>
 
 <p>This configmap will have to be updated everytime you want to add or remove a .onion backend.</p>
 <p>Since we need a tor daemon AND an onionbalance daemon, we'll need 2 containers for this pod.</p>
 <p>Let's create a new pod for those 2 :</p>
-<div class="codehilite"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-  <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DeploymentConfig</span>
-  <span class="nt">metadata</span><span class="p">:</span>
-    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance-8mv1fjcxc8</span>
-  <span class="nt">spec</span><span class="p">:</span>
-    <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
-    <span class="nt">template</span><span class="p">:</span>
-      <span class="nt">metadata</span><span class="p">:</span>
-        <span class="nt">labels</span><span class="p">:</span>
-          <span class="nt">app</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance</span>
-      <span class="nt">spec</span><span class="p">:</span>
-        <span class="nt">containers</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tor</span>
-          <span class="nt">ports</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="nt">containerPort</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">9051</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">controlport</span>
-          <span class="nt">volumeMounts</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/tor</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torrc</span>
-          <span class="p p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/shared</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span>
-        <span class="p p-Indicator">-</span> <span class="nt">command</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/onionbalance-entrypoint.sh</span>
-          <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance</span>
-          <span class="nt">volumeMounts</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/shared</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span>
-          <span class="p p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/import-key</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">masterkey</span>
-          <span class="p p-Indicator">-</span> <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/data/import-conf</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">masterconf</span>
-        <span class="nt">volumes</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="nt">emptyDir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span>
-        <span class="p p-Indicator">-</span> <span class="nt">configMap</span><span class="p">:</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance-torrc</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">torrc</span>
-        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">masterkey</span>
-          <span class="nt">secret</span><span class="p">:</span>
-            <span class="nt">secretName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.key</span>
-        <span class="p p-Indicator">-</span> <span class="nt">configMap</span><span class="p">:</span>
-            <span class="nt">items</span><span class="p">:</span>
-            <span class="p p-Indicator">-</span> <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.conf</span>
-              <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config.yaml</span>
-            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.conf</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">masterconf</span>
-    <span class="nt">triggers</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ConfigChange</span>
-    <span class="p p-Indicator">-</span> <span class="nt">imageChangeParams</span><span class="p">:</span>
-        <span class="nt">automatic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-        <span class="nt">containerNames</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">tor</span>
-        <span class="nt">from</span><span class="p">:</span>
-          <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageChange</span>
-    <span class="p p-Indicator">-</span> <span class="nt">imageChangeParams</span><span class="p">:</span>
-        <span class="nt">automatic</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-        <span class="nt">containerNames</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">onionbalance</span>
-        <span class="nt">from</span><span class="p">:</span>
-          <span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span>
-          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span>
-      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ImageChange</span>
+<div class="codehilite"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeploymentConfig</span><span class="w"></span>
+<span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance-8mv1fjcxc8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance</span><span class="w"></span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tor</span><span class="w"></span>
+<span class="w">          </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9051</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controlport</span><span class="w"></span>
+<span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/tor</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torrc</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/shared</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">command</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/onionbalance-entrypoint.sh</span><span class="w"></span>
+<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance</span><span class="w"></span>
+<span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/shared</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/import-key</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">masterkey</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/data/import-conf</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">masterconf</span><span class="w"></span>
+<span class="w">        </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volume-data-tor</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">configMap</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance-torrc</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torrc</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">masterkey</span><span class="w"></span>
+<span class="w">          </span><span class="nt">secret</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.key</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">configMap</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.conf</span><span class="w"></span>
+<span class="w">              </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config.yaml</span><span class="w"></span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bl2eo4cvuyrcd47v.conf</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">masterconf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">triggers</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigChange</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">imageChangeParams</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">automatic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">containerNames</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tor</span><span class="w"></span>
+<span class="w">        </span><span class="nt">from</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageChange</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">imageChangeParams</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">automatic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">containerNames</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionbalance</span><span class="w"></span>
+<span class="w">        </span><span class="nt">from</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageStreamTag</span><span class="w"></span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onionshift:latest</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ImageChange</span><span class="w"></span>
 </code></pre></div>
 
 <p>(all those objects, secret, configmap, deploymentconfig, ..., are generated by the <a href="#tldr2">templates</a>)</p>
@@ -505,10 +505,10 @@ akz77e4fe6c5iwbf.onion
 </code></pre></div>
 
 <p>This was a sec after starting. After a while :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">/ $  socat - unix-connect:/data/onionbalance/control</span>
-<span class="err">bl2eo4cvuyrcd47v.onion 2016-10-03 15:15:17</span>
-<span class="err">  hbvlni32fc32v7zw.onion 2016-10-03 15:00:00 3 IPs</span>
-<span class="err">  6bztlzyrm7lhzy2g.onion 2016-10-03 15:00:00 3 IPs</span>
+<div class="codehilite"><pre><span></span><code><span class="o">/</span><span class="w"> </span>$<span class="w">  </span><span class="nv">socat</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">unix</span><span class="o">-</span><span class="k">connect</span>:<span class="o">/</span><span class="nv">data</span><span class="o">/</span><span class="nv">onionbalance</span><span class="o">/</span><span class="nv">control</span><span class="w"></span>
+<span class="nv">bl2eo4cvuyrcd47v</span>.<span class="nv">onion</span><span class="w"> </span><span class="mi">2016</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="w"> </span><span class="mi">15</span>:<span class="mi">15</span>:<span class="mi">17</span><span class="w"></span>
+<span class="w">  </span><span class="nv">hbvlni32fc32v7zw</span>.<span class="nv">onion</span><span class="w"> </span><span class="mi">2016</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="w"> </span><span class="mi">15</span>:<span class="mi">00</span>:<span class="mi">00</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nv">IPs</span><span class="w"></span>
+<span class="w">  </span><span class="mi">6</span><span class="nv">bztlzyrm7lhzy2g</span>.<span class="nv">onion</span><span class="w"> </span><span class="mi">2016</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="w"> </span><span class="mi">15</span>:<span class="mi">00</span>:<span class="mi">00</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nv">IPs</span><span class="w"></span>
 </code></pre></div>
 
 <p>To simply see the logs when a pod has several containers, you need to add the <code>-c CONTAINER</code> option. Example:</p>
@@ -539,7 +539,7 @@ akz77e4fe6c5iwbf.onion
 <p><a id='toc-id-12' /></p>
 <h3>scale up onionbalance</h3>
 <p>Just run :</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc scale --replicas=2 dc onionbalance</span>
+<div class="codehilite"><pre><span></span><code>oc scale --replicas=2 dc onionbalance
 </code></pre></div>
 
 <p>Or use the web console:</p>
@@ -550,7 +550,7 @@ akz77e4fe6c5iwbf.onion
 <p><a id='toc-id-14' /></p>
 <h3>onionshift</h3>
 <p>add the template to your namespace:</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionshift.yaml</span>
+<div class="codehilite"><pre><span></span><code>oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionshift.yaml
 </code></pre></div>
 
 <p>Then use command line <code>oc</code> to process the template or web console :</p>
@@ -564,7 +564,7 @@ akz77e4fe6c5iwbf.onion
 <li>list of .onion to loadbalance</li>
 </ul>
 <p>It will create secret, deploymentconfig, configmap, buildconfig, imagestream, etc, for you. Just import it to your project:</p>
-<div class="codehilite"><pre><span></span><code><span class="err">oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionbalance.yaml</span>
+<div class="codehilite"><pre><span></span><code>oc create -f https://raw.githubusercontent.com/fridim/onionshift/master/templates/onionbalance.yaml
 </code></pre></div>
 
 <p>You can process it and run it from the command-line with <code>oc</code> or from the webconsole :</p>
@@ -607,7 +607,7 @@ pkill -sighup tor
 <li>create another Dockerfile (repository?) for onionbalance</li>
 </ul><hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/tor_hidden_service_on_openshift_3.md">notes/tor_hidden_service_on_openshift_3.md</a>&nbsp;
 (<a href="/notes/tor_hidden_service_on_openshift_3.md.asc.txt">GPG sig</a>)&nbsp;
-Sat&nbsp;Feb&nbsp;&nbsp;6&nbsp;08:08:51&nbsp;AM&nbsp;CET&nbsp;2021
+Mon&nbsp;Oct&nbsp;&nbsp;3&nbsp;04:06:54&nbsp;PM&nbsp;CEST&nbsp;2022
 &nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
 
   </div>
