@@ -113,6 +113,7 @@ googleapis\.com$
 .Ansible playbook to quickly allow a domain
 [source,yaml]
 ----
+#!/bin/env -S ansible-playbook -i opi,
 - hosts: opi
   become: true
   gather_facts: false

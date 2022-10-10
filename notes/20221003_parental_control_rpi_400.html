@@ -727,7 +727,8 @@ googleapis\.com$
 <div class="listingblock">
 <div class="title">Ansible playbook to quickly allow a domain</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml">- <span class="string"><span class="content">hosts: opi</span></span>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="comment">#!/bin/env -S ansible-playbook -i opi,</span>
+- <span class="string"><span class="content">hosts: opi</span></span>
   <span class="key">become</span>: <span class="string"><span class="content">true</span></span>
   <span class="key">gather_facts</span>: <span class="string"><span class="content">false</span></span>
   <span class="key">vars_prompt</span>:
@@ -848,7 +849,7 @@ systemctl enable firehol</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-10-03 16:57:38 +0200
+Last updated 2022-10-10 10:18:21 +0200
 </div>
 </div>
 </body>
