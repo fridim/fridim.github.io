@@ -176,6 +176,10 @@ interface any world
     server ping accept
     client ping accept
 
+    # allow NTP and DNS
+    client ntp accept
+    client dns accept
+
     # Allow outgoing traffic only to the proxy
     client4 tinyproxy accept dst 192.168.1.21
 ----
@@ -205,6 +209,16 @@ export http_proxy=http://192.168.X.X:8888  # zerotier
 ----
 interface any world
   client4 tinyproxy accept dst 192.168.X.X # zerotier
+----
+
+=== Notifications ===
+
+By default notification are broken in Bullseye-based raspberrypi OS. Make sure to run the `notification-daemon`:
+
+----
+apt install libnotify-bin notify-osd notification-daemon
+
+echo "@/usr/lib/notification-daemon/notification-daemon" >> /etc/xdg/lxsession/LXDE-pi/autostart
 ----
 
 
