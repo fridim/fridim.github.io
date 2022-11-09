@@ -20,7 +20,7 @@ EnableDisqus = false
 %.html: %.adoc inc/disqus.adoc
 	cp $< $<.tmp
 	if [ $(EnableDisqus) = true ]; then cat inc/disqus.adoc >> $<.tmp; fi
-	asciidoctor -o - $<.tmp > "$@"
+	asciidoctor -a stylesheet=golo.css -o - $<.tmp > "$@"
 	rm -f $<.tmp
 
 %.html: %.md Makefile inc/head.html inc/disqus.html
