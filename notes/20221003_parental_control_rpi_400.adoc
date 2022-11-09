@@ -49,6 +49,16 @@ image::../images/2022-10-03_13-45_timekpr2.png[timekpra]
 <2> Define number of hours per week
 
 
+==== Add more time ====
+
+If you want to punctually add time, you can do it in the client UI or using the CLI tool:
+
+----
+# replace 'kid' with the appropriate login name
+timekpra --settimeleft 'kid' '=' 3600   # reset to 1h
+timekpra --settimeleft 'kid' '+' 600    # add 10m
+----
+
 === Filtering Web access ===
 
 To filter web access, set up TinyProxy on one of the local network machines. For me, it's an Orange Pi 4 LTS. I think it's easier if the proxy lives on a different machine than the child's computer. But it could be possible to bind it there, maybe a bit complex.
