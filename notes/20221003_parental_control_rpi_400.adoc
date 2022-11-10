@@ -22,7 +22,7 @@ Since he is pretty young to have full access, I want to set up the Pi in a certa
 Pi 400 comes in a bundle with a mouse, an SD card with pre-installed OS, and cables. All it needs now is an HDMI monitor.
 Frankly, it looks great.
 
-image::../images/pi400.jpeg[pi400]
+image::../images/pi400.webp[pi400]
 
 After playing with it for a couple of hours, the overall sensation is pretty good. Browsing the web is fast. The OS is Raspbian 11, bullseye Debian.
 
@@ -41,10 +41,10 @@ sudo gpasswd -a fridim timekpr
 # relaunch X session
 ----
 
-image::../images/2022-10-03_13-38_timekpr.png[timekpra]
+image::../images/2022-10-03_13-38_timekpr.webp[timekpra]
 <1> Run the `timekpra` as admin
 
-image::../images/2022-10-03_13-45_timekpr2.png[timekpra]
+image::../images/2022-10-03_13-45_timekpr2.webp[timekpra]
 <1> Select user
 <2> Define number of hours per week
 
