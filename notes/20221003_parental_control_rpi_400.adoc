@@ -120,6 +120,8 @@ googleapis\.com$
 .*\.googleapis\.com$
 ----
 
+Complete maintained version is available link:https://gist.github.com/fridim/57bc08e1f6eb2de64d1b8849cc5e4fcf[here].
+
 .Ansible playbook to quickly allow a domain
 [source,yaml]
 ----
