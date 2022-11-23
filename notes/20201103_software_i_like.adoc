@@ -17,6 +17,7 @@ Guillaume Coré (fridim)
 * link:https://mosh.org[Mosh (mobile shell)] instead of SSH, when you're roaming, it's a must have
 * link:https://github.com/tmux/tmux[tmux]
 * link:https://github.com/alacritty/alacritty[Alacritty] rust terminal that uses GPU
+** shell prompt: link:https://starship.rs/[starship]
 * link:https://github.com/flameshot-org/flameshot[Flameshot] screenshot software
 * link:https://protonvpn.com/[protonvpn], link:https://proton.me/[proton mail]
 * link:https://zerotier.com[zerotier]: zeroconf VPN for local and remote machines
