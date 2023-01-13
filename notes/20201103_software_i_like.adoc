@@ -17,9 +17,11 @@ Guillaume Coré (fridim)
 * link:https://mosh.org[Mosh (mobile shell)] instead of SSH, when you're roaming, it's a must have
 * link:https://github.com/tmux/tmux[tmux]
 * link:https://github.com/alacritty/alacritty[Alacritty] rust terminal that uses GPU
-** shell prompt: link:https://starship.rs/[starship]
+* link:https://starship.rs/[starship] shell prompt
+* link:https://jless.io/[jless], a command-line JSON viewer
 * link:https://github.com/flameshot-org/flameshot[Flameshot] screenshot software
-* link:https://protonvpn.com/[protonvpn], link:https://proton.me/[proton mail]
+* link:https://mullvad.net/[mullvad VPN]
+* link:https://proton.me/[proton mail]
 * link:https://zerotier.com[zerotier]: zeroconf VPN for local and remote machines
 
 === Mobile
@@ -32,6 +34,7 @@ Guillaume Coré (fridim)
 * link:https://play.google.com/store/apps/details?id=com.benshistudio[Benshi] image:../images/fr.png[fr] Vidéo pour les enfants (par âge, thème)
 * link:https://play.google.com/store/apps/details?id=com.appxy.tinyscan[Tiny Scanner Pro] to scan documents from the mobile
 * link:https://play.google.com/store/apps/details?id=im.vector.app[Element], link:https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms[Signal] and link:https://play.google.com/store/apps/details?id=io.olvid.messenger[Olvid] for instant messaging
+*link:https://github.com/markusfisch/BinaryEye[BinaryEye] barcode and QR code scanner. Open source, no adds.
 
 == Programming
 
