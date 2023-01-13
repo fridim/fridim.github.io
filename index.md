@@ -20,4 +20,5 @@ Contact
 
 * my GnuPG: [public key <code>0x0A74F4B1A9903389</code>](files/0x0A74F4B1A9903389.asc.txt)
 * Github: [fridim](http://github.com/fridim)
+* Mastodon: [@fridim@mamot.fr](https://mamot.fr/@fridim)
 * LinkedIn: [guillaumecore](http://www.linkedin.com/in/guillaumecore)
