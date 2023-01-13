@@ -34,7 +34,7 @@ Guillaume Coré (fridim)
 * link:https://play.google.com/store/apps/details?id=com.benshistudio[Benshi] image:../images/fr.png[fr] Vidéo pour les enfants (par âge, thème)
 * link:https://play.google.com/store/apps/details?id=com.appxy.tinyscan[Tiny Scanner Pro] to scan documents from the mobile
 * link:https://play.google.com/store/apps/details?id=im.vector.app[Element], link:https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms[Signal] and link:https://play.google.com/store/apps/details?id=io.olvid.messenger[Olvid] for instant messaging
-*link:https://github.com/markusfisch/BinaryEye[BinaryEye] barcode and QR code scanner. Open source, no adds.
+* link:https://github.com/markusfisch/BinaryEye[BinaryEye] barcode and QR code scanner. Open source, no adds.
 
 == Programming
 
