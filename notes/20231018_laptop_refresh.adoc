@@ -1,0 +1,82 @@
+== Laptop Refresh ==
+
+Here is my process and notes for a laptop refresh.
+Usually i just migrate from one Lenovo laptop to the next one, so the hardware is pretty similar.
+
+* 2023-10-18:  migrated from T480s to T14s.  (link:https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14/T14s_(Intel)_Gen_2[archwiki])
+
+Boot on a liveusb stick on both laptop. Ex, archlinux ISO. Connect them both with an eth cable.
+
+.From old Laptop
+----
+ip add 192.168.2.1/24 dev <ETH INTERFACE>
+dd if=/dev/nvme0n1 | ncat -l 192.168.2.1 8080
+
+----
+
+From now on, everything is done from new laptop
+
+.Copy disk
+----
+ip add 192.168.2.2/24 dev <ETH INTERFACE>
+ncat 192.168.2.1 8080 | dd of=/dev/nvme0n1 status=progress
+sync
+----
+
+.Fix partitions
+----
+# first backup partitions table
+sfdisk -d /dev/nvme0n1 > /tmp/nvme0n1.fdisk
+sgdisk  -b /tmp/nvme0n1.gdisk /dev/nvme0n1
+
+# open luks device
+cryptsetup luksOpen /dev/nvme0n1p3 arch
+vgscan
+gdisk /dev/nvme0n1 # fix GPT  and save
+# convert to GPT if needed
+sgdisk -g /dev/nvme0n1
+----
+
+
+.Resize partitions
+----
+parted /dev/nvme0n1 # to extend the partition. resizepart NUMBER END.
+vgchange -a n vg0 # Stop using the VG so you can do the next step.
+cryptsetup luksClose arch # Close the encrypted volume for the next steps.
+cryptsetup luksOpen /dev/nvme0n1 arch # Open it again.
+cryptsetup resize arch # Will automatically resize the LUKS volume to the available space.
+vgchange -a y vg0 # Activate the VG.
+pvresize /dev/mapper/arch # Resize the PV.
+----
+
+At this point the Volume Group should have more room. Up to you to resize / or save that space for later.
+
+.Install grub
+----
+mount /dev/mapper/vg0-root /mnt
+mount /dev/nvme0n1p2 /mnt/boot
+mount /dev/nvme0n1p1 /mnt/boot/efi
+arch-chroot /mnt
+grub-install --target=x86_64-efi --efi-directory=/boot/efi
+----
+
+Reboot.
+Then check logs for things that need fixing.
+
+.Update firmwares
+----
+fwupdmgr refresh
+fwupdmgr get-updates
+fwupdmgr update
+----
+
+.Watch logs
+----
+journalctl -b -p 0..4 # check boot messages
+dmesg -w -l emerg,alert,crit,err,warn
+----
+
+.Common post migration steps, or things to fix
+----
+sensors-detect  # rescan sensors
+----

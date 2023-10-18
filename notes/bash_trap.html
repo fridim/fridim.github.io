@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Guillaume Coré (fridim) - personal page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="StyleSheet" rev="StyleSheet" href="/pygments.css" type="text/css" />
+  <!-- <link rel="StyleSheet" rev="StyleSheet" href="/bootstrap.min.css" type="text/css" /> -->
+  <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-4ZPLezkTZTsojWFhpdFembdzFudphhoOzIunR1wH6g1WQDzCAiPvDyitaK67mp0+" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css" />
+  <link rel="StyleSheet" rev="StyleSheet" href="/index.css" type="text/css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+  <div class="pure-g">
+    <div class="pure-u-1">
+<p>Usefull to to clean tmpfiles for example.</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+<span class="c1"># trap function</span>
+_on_exit<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">local</span> <span class="nv">exit_status</span><span class="o">=</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">$?</span><span class="si">}</span>
+    <span class="c1"># Do something</span>
+    <span class="nb">exit</span> <span class="nv">$exit_status</span>
+<span class="o">}</span>
+
+<span class="nb">trap</span> <span class="s2">&quot;_on_exit&quot;</span> EXIT
+
+<span class="c1"># your code</span>
+
+<span class="nb">exit</span> <span class="m">0</span><span class="p">;</span>
+</code></pre></div><hr /><div id="footer">$&nbsp;from&nbsp;<a href="../notes/bash_trap.md">notes/bash_trap.md</a>&nbsp;
+Wed&nbsp;Nov&nbsp;&nbsp;9&nbsp;11:41:18&nbsp;PM&nbsp;CET&nbsp;2022
+&nbsp;$<br />Powered by <a href="/Makefile">Make</a> &amp; <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> </div>
+
+  </div>
+  </div>
+</body>
+</html>
