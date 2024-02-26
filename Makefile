@@ -1,6 +1,6 @@
 #  Where the markdown files are
 mddir = notes
-GPGkey = 0x0A74F4B1A9903389 # gpg key used to sign .md files
+GPGkey = 0xAF8AD9BDDDD66647 # gpg key used to sign .md files
 
 mdfiles = $(shell find $(mddir)/ -name "*.md" ! -iname '*draft*') index.md
 adocfiles = $(shell find notes/ -name "*.adoc" ! -iname '*draft*')
