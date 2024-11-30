@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.20">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="description" content="Software I like">
 <meta name="keywords" content="android, linux">
 <meta name="author" content="Guillaume Coré (fridim)">
-<title>Software i like (and use)</title>
+<title>Software and services i like (and use)</title>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Varela+Round|Open+Sans:400italic,600italic,400,600|Noto+Serif:400,400italic,700,700italic|Roboto+Mono:400);
 /*! normalize.css v2.1.2 | MIT License | git.io/normalize */
@@ -750,21 +750,9 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 </head>
 <body class="article">
 <div id="header">
-<h1>Software i like (and use)</h1>
+<h1>Software and services i like (and use)</h1>
 <div class="details">
 <span id="author" class="author">Guillaume Coré (fridim)</span><br>
-</div>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_in_bulk">In bulk</a>
-<ul class="sectlevel2">
-<li><a href="#_mobile">Mobile</a></li>
-</ul>
-</li>
-<li><a href="#_programming">Programming</a></li>
-<li><a href="#_editor">Editor</a></li>
-</ul>
 </div>
 </div>
 <div id="content">
@@ -777,7 +765,7 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 <p>Archlinux (laptop &amp; desktop)</p>
 </li>
 <li>
-<p>Alpine Linux (server)</p>
+<p><a href="https://www.alpinelinux.org/">Alpine Linux</a> (server)</p>
 </li>
 <li>
 <p><a href="https://i3wm.org/">i3wm</a> to manage my windows</p>
@@ -790,22 +778,45 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 </div>
 </li>
 <li>
+<p>Emacs with <a href="https://github.com/hlissner/doom-emacs">Doom</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://orgmode.org/">Org mode</a> for my notes &amp;&amp; todo list</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p><a href="https://syncthing.net/foundation/">syncthing</a> to sync files</p>
 </li>
 <li>
-<p><a href="https://keepassxc.org/">keepassxc</a> password manager</p>
+<p><a href="https://github.com/restic/restic">restic</a> for backups, SFTP backend with <a href="rsync.net">rsync.net</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>rsync.net has an <a href="https://www.rsync.net/products/borg.html">offer for borg users</a> which ticks a lot of boxes. It says Borg but will work with restic (it&#8217;s just SFTP).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://keepassxc.org/">keepassxc</a> password manager, OTP</p>
 </li>
 <li>
 <p><a href="https://mosh.org">Mosh (mobile shell)</a> instead of SSH, when you&#8217;re roaming, it&#8217;s a must have</p>
 </li>
 <li>
-<p><a href="https://github.com/tmux/tmux">tmux</a></p>
+<p><span class="line-through"><a href="https://github.com/tmux/tmux">tmux</a></span> <a href="https://zellij.dev/">zellij</a></p>
 </li>
 <li>
 <p><a href="https://github.com/alacritty/alacritty">Alacritty</a> rust terminal that takes advantage of your GPU</p>
 </li>
 <li>
 <p><a href="https://starship.rs/">starship</a> shell prompt</p>
+</li>
+<li>
+<p><a href="https://atuin.sh/">atuin</a> shell history</p>
 </li>
 <li>
 <p><a href="https://jless.io/">jless</a>, a command-line JSON viewer</p>
@@ -817,10 +828,13 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 <p><a href="https://mullvad.net/">mullvad VPN</a></p>
 </li>
 <li>
-<p><a href="https://proton.me/">proton mail</a></p>
+<p><a href="https://proton.me/">proton mail</a> &amp; calendar &amp; drive</p>
 </li>
 <li>
 <p><a href="https://zerotier.com">zerotier</a>: zeroconf VPN for local and remote machines</p>
+</li>
+<li>
+<p><a href="https://github.com/bk138/gromit-mpx">gromit-MPX</a> on-screen annotation tool for presentation while sharing screen</p>
 </li>
 </ul>
 </div>
@@ -829,13 +843,19 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.etesync.com/">etesync</a> to sync contacts, calendar and tasks</p>
+<p><a href="https://syncthing.net/foundation/">syncthing</a> to sync files between devices</p>
 </li>
 <li>
-<p><a href="https://syncthing.net/foundation/">syncthing</a> to sync files</p>
+<p><a href="https://www.orgzlyrevived.com/">orgzly revived</a> for notes and todo (+syncthing)</p>
 </li>
 <li>
-<p><a href="https://play.google.com/store/apps/details?id=org.shadowice.flocke.andotp">andOTP</a> for everything 2FA</p>
+<p><span class="line-through">etesync</span> <a href="https://f-droid.org/packages/org.decsync.cc/">decsync</a> to sync contacts (+syncthing)</p>
+</li>
+<li>
+<p><a href="https://play.google.com/store/apps/details?id=keepass2android.keepass2android&amp;pcampaignid=web_share">keepass2android</a> password manager, OTP (+syncthing)</p>
+</li>
+<li>
+<p><a href="https://proton.me/">proton mail</a> &amp; calendar &amp; drive</p>
 </li>
 <li>
 <p><a href="https://play.google.com/store/apps/details?id=de.danoeh.antennapod">AntennaPod</a> for podcasts</p>
@@ -847,10 +867,7 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 <p><a href="https://play.google.com/store/apps/details?id=com.benshistudio">Benshi</a> <span class="image"><img src="../images/fr.png" alt="fr"></span> Vidéo pour les enfants (par âge, thème)</p>
 </li>
 <li>
-<p><a href="https://play.google.com/store/apps/details?id=com.appxy.tinyscan">Tiny Scanner Pro</a> to scan documents from the mobile</p>
-</li>
-<li>
-<p><a href="https://play.google.com/store/apps/details?id=im.vector.app">Element</a>, <a href="https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms">Signal</a> and <a href="https://play.google.com/store/apps/details?id=io.olvid.messenger">Olvid</a> for instant messaging</p>
+<p><span class="line-through"><a href="https://play.google.com/store/apps/details?id=im.vector.app">Element</a></span>, <a href="https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms">Signal</a></p>
 </li>
 <li>
 <p><a href="https://github.com/markusfisch/BinaryEye">BinaryEye</a> barcode and QR code scanner. Open source, no adds.</p>
@@ -860,45 +877,10 @@ pre.pygments.highlight { background-color: rgba(16, 195, 196, 0.05); }
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_programming">Programming</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Golang</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_editor">Editor</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>I use Emacs with <a href="https://github.com/hlissner/doom-emacs">Doom</a> framework.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../images/2020-11-02_emacs.png" alt="emacs">
-</div>
-</div>
-<div class="paragraph">
-<p>Notable modules:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://wiki.archlinux.org/index.php/Mediawiki-el">mediawiki.el</a> — <strong>Very</strong> useful when you have to work with Mediawiki. The web editor is very bad, and working from your editor is a big plus.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-10-18 11:10:27 +0200
+Last updated 2024-11-30 09:34:50 +0100
 </div>
 </div>
 </body>

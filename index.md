@@ -4,6 +4,7 @@ Guillaume Coré (fridim)
 Blog
 --------
 
+* 2024-11-30 [Software i like](notes/20201103_software_i_like.html) updated
 * 2023-10-18 [Laptop refresh](notes/20231018_laptop_refresh.html)
 * 2022-10-03 [Parental Control on a Raspberry Pi 400](notes/20221003_parental_control_rpi_400.html)
 * 2022-09-25 [Software i like](notes/20201103_software_i_like.html) updated

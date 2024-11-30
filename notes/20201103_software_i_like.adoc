@@ -1,7 +1,6 @@
-= Software i like (and use)
+= Software and services i like (and use)
 Guillaume Coré (fridim)
 :icons: font
-:toc:
 :source-highlighter: coderay
 :description: Software I like
 :keywords: android, linux
@@ -9,43 +8,36 @@ Guillaume Coré (fridim)
 == In bulk
 
 * Archlinux (laptop & desktop)
-* Alpine Linux (server)
+* link:https://www.alpinelinux.org/[Alpine Linux] (server)
 * link:https://i3wm.org/[i3wm] to manage my windows
 ** link:https://github.com/vivien/i3blocks[i3blocks] status bar
+* Emacs with link:https://github.com/hlissner/doom-emacs[Doom]
+** link:https://orgmode.org/[Org mode] for my notes && todo list
 * link:https://syncthing.net/foundation/[syncthing] to sync files
-* link:https://keepassxc.org/[keepassxc] password manager
+* link:https://github.com/restic/restic[restic] for backups, SFTP backend with link:rsync.net[rsync.net]
+** rsync.net has an link:https://www.rsync.net/products/borg.html[offer for borg users] which ticks a lot of boxes. It says Borg but will work with restic (it's just SFTP).
+* link:https://keepassxc.org/[keepassxc] password manager, OTP
 * link:https://mosh.org[Mosh (mobile shell)] instead of SSH, when you're roaming, it's a must have
-* link:https://github.com/tmux/tmux[tmux]
+* [.line-through]#link:https://github.com/tmux/tmux[tmux]# link:https://zellij.dev/[zellij]
 * link:https://github.com/alacritty/alacritty[Alacritty] rust terminal that takes advantage of your GPU
 * link:https://starship.rs/[starship] shell prompt
+* link:https://atuin.sh/[atuin] shell history
 * link:https://jless.io/[jless], a command-line JSON viewer
 * link:https://github.com/flameshot-org/flameshot[Flameshot] screenshot software
 * link:https://mullvad.net/[mullvad VPN]
-* link:https://proton.me/[proton mail]
+* link:https://proton.me/[proton mail] & calendar & drive
 * link:https://zerotier.com[zerotier]: zeroconf VPN for local and remote machines
+* link:https://github.com/bk138/gromit-mpx[gromit-MPX] on-screen annotation tool for presentation while sharing screen
 
 === Mobile
 
-* link:https://www.etesync.com/[etesync] to sync contacts, calendar and tasks
-* link:https://syncthing.net/foundation/[syncthing] to sync files
-* link:https://play.google.com/store/apps/details?id=org.shadowice.flocke.andotp[andOTP] for everything 2FA
+* link:https://syncthing.net/foundation/[syncthing] to sync files between devices
+* link:https://www.orgzlyrevived.com/[orgzly revived] for notes and todo (+syncthing)
+* [.line-through]#etesync# link:https://f-droid.org/packages/org.decsync.cc/[decsync] to sync contacts (+syncthing)
+* link:https://play.google.com/store/apps/details?id=keepass2android.keepass2android&pcampaignid=web_share[keepass2android] password manager, OTP (+syncthing)
+* link:https://proton.me/[proton mail] & calendar & drive
 * link:https://play.google.com/store/apps/details?id=de.danoeh.antennapod[AntennaPod] for podcasts
 * link:https://play.google.com/store/apps/details?id=com.bandcamp.android[Bandcamp] and link:https://play.google.com/store/apps/details?id=com.discogs.app[Discogs] (link:https://www.discogs.com/[web] is great too) for music
 * link:https://play.google.com/store/apps/details?id=com.benshistudio[Benshi] image:../images/fr.png[fr] Vidéo pour les enfants (par âge, thème)
-* link:https://play.google.com/store/apps/details?id=com.appxy.tinyscan[Tiny Scanner Pro] to scan documents from the mobile
-* link:https://play.google.com/store/apps/details?id=im.vector.app[Element], link:https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms[Signal] and link:https://play.google.com/store/apps/details?id=io.olvid.messenger[Olvid] for instant messaging
+* [.line-through]#link:https://play.google.com/store/apps/details?id=im.vector.app[Element]#, link:https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms[Signal]
 * link:https://github.com/markusfisch/BinaryEye[BinaryEye] barcode and QR code scanner. Open source, no adds.
-
-== Programming
-
-* Golang
-
-== Editor
-
-I use Emacs with link:https://github.com/hlissner/doom-emacs[Doom] framework.
-
-image::../images/2020-11-02_emacs.png[emacs]
-
-Notable modules:
-
-* link:https://wiki.archlinux.org/index.php/Mediawiki-el[mediawiki.el] — *Very* useful when you have to work with Mediawiki. The web editor is very bad, and working from your editor is a big plus.
