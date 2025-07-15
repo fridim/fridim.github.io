@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.20">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <title>Laptop Refresh</title>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Varela+Round|Open+Sans:400italic,600italic,400,600|Noto+Serif:400,400italic,700,700italic|Roboto+Mono:400);
@@ -769,8 +769,15 @@ Usually i just migrate from one Lenovo laptop to the next one, so the hardware i
 <div class="title">From old Laptop</div>
 <div class="content">
 <pre>ip add 192.168.2.1/24 dev &lt;ETH INTERFACE&gt;
-dd if=/dev/nvme0n1 | ncat -l 192.168.2.1 8080</pre>
+dd if=/dev/nvme0n1 | ncat -l 192.168.2.1 8080  # <b class="conum">(1)</b></pre>
 </div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>While dd | ncat is simple and effective, heavy use of dd can be slow and may clone unused space. Many in the Arch/Unix community recommend tools like <code>ddrescue</code>, <code>rsync</code>, or Clonezilla for more efficient and flexible cloning .</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>From now on, everything is done from new laptop</p>
@@ -820,7 +827,8 @@ pvresize /dev/mapper/arch # Resize the PV.</pre>
 mount /dev/nvme0n1p2 /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot/efi
 arch-chroot /mnt
-grub-install --target=x86_64-efi --efi-directory=/boot/efi</pre>
+grub-install --target=x86_64-efi --efi-directory=/boot/efi
+blkid # and fix UUID in /etc/fstab</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -853,7 +861,7 @@ dmesg -w -l emerg,alert,crit,err,warn</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-10-18 11:16:17 +0200
+Last updated 2025-07-15 14:11:39 +0200
 </div>
 </div>
 </body>

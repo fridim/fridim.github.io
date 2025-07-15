@@ -10,9 +10,10 @@ Boot on a liveusb stick on both laptop. Ex, archlinux ISO. Connect them both wit
 .From old Laptop
 ----
 ip add 192.168.2.1/24 dev <ETH INTERFACE>
-dd if=/dev/nvme0n1 | ncat -l 192.168.2.1 8080
+dd if=/dev/nvme0n1 | ncat -l 192.168.2.1 8080  # <1>
 
 ----
+<1> While dd | ncat is simple and effective, heavy use of dd can be slow and may clone unused space. Many in the Arch/Unix community recommend tools like `ddrescue`, `rsync`, or Clonezilla for more efficient and flexible cloning .
 
 From now on, everything is done from new laptop
 
@@ -58,6 +59,7 @@ mount /dev/nvme0n1p2 /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot/efi
 arch-chroot /mnt
 grub-install --target=x86_64-efi --efi-directory=/boot/efi
+blkid # and fix UUID in /etc/fstab
 ----
 
 Reboot.
