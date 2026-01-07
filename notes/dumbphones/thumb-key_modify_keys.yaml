@@ -1,0 +1,216 @@
+---
+FRENFrappeFluideV1:
+  main:
+    key0_0:
+      center:
+        text: o
+      top:
+        text: "\u0308"
+        displayText: '¨'
+        color: SECONDARY
+        size: SMALL
+      bottomLeft:
+        text: OK
+        swipeReturnText: "d’accord"
+        color: SECONDARY
+        size: SMALL
+      bottomRight:
+        text: "ô"
+        color: SECONDARY
+    key0_1:
+      topLeft:
+        text: "\u0300"
+        displayText: "`"
+        color: SECONDARY
+        size: SMALL
+      left:
+        text: mm
+        swipeReturnText: "même"
+        color: SECONDARY
+        size: SMALL
+      top:
+        text: "\u0302"
+        displayText: "^"
+        color: SECONDARY
+        size: SMALL
+      topRight:
+        text: "\u0301"
+        displayText: "ˊ"
+        color: SECONDARY
+        size: SMALL
+    key0_2:
+      bottom:
+        # on remplace î
+        text: "c’est "
+        swipeReturnText: "C’est "
+        displayText: c’
+        color: SECONDARY
+        size: SMALL
+      top:
+        text: ff
+        color: SECONDARY
+        size: SMALL
+      bottomRight:
+        # on remplace ô
+        text: ment
+        color: SECONDARY
+        swipeReturnText: Ment
+        size: SMALLEST
+      right:
+        # on remplace gh
+        text: "c’était "
+        swipeReturnText: "C’était "
+        displayText: c’t
+        color: SECONDARY
+        size: SMALL
+    key1_0:
+      center:
+        text: s
+      bottomLeft:
+        # on remplace l'espace insecable
+        text: oui
+        swipeReturnText: Oui
+        color: SECONDARY
+        size: SMALL
+    key1_1:
+      top:
+        text: u
+    key1_2:
+      bottom:
+        # l'espace est vide
+        text: pas
+        swipeReturnText: Pas
+        size: SMALLEST
+      bottomRight:
+        text: non
+        color: SECONDARY
+        swipeReturnText: Non
+        size: SMALL
+      topLeft:
+        color: 
+    key2_0:
+      left:
+        # on remplace les " asymetriques
+        text: j’ai
+        swipeReturnText: "je suis "
+        size: SMALL
+        color: SECONDARY
+    key2_1:
+      center:
+        text: e
+      top:
+        text: qu
+        size: SMALL
+        color: SECONDARY
+    key2_2:
+      right:
+        # on remplace les " asymetriques
+        text: pour
+        swipeReturnText: Pour
+        size: SMALLEST
+        color: SECONDARY
+  shifted:
+    key0_0:
+      center:
+        text: O
+      top:
+        text: "\u0308"
+        displayText: '¨'
+        color: SECONDARY
+        size: SMALL
+      bottomLeft:
+        text: OK
+        swipeReturnText: "D’accord"
+        color: SECONDARY
+        size: SMALL
+      bottomRight:
+        text: "Ô"
+        color: SECONDARY
+    key0_1:
+      topLeft:
+        text: "\u0300"
+        displayText: "`"
+        color: SECONDARY
+        size: SMALL
+      left:
+        text: MM
+        swipeReturnText: "Même"
+        color: SECONDARY
+        size: SMALL
+      top:
+        text: "\u0302"
+        displayText: "^"
+        color: SECONDARY
+        size: SMALL
+      topRight:
+        text: "\u0301"
+        displayText: "ˊ"
+        color: SECONDARY
+        size: SMALL
+    key0_2:
+      bottom:
+        # on remplace î
+        text: "C’est "
+        displayText: C’
+        swipeReturnText: "C’EST "
+        color: SECONDARY
+        size: SMALL
+      top:
+        text: FF
+        color: SECONDARY
+        size: SMALL
+      bottomRight:
+        # on remplace ô
+        text: Ment
+        color: SECONDARY
+        swipeReturnText: MENT
+        size: SMALLEST
+      right:
+        # on remplace gh
+        text: "C’était "
+        swipeReturnText: "C’ÉTAIT "
+        displayText: C’t
+        color: SECONDARY
+        size: SMALL
+    key1_0:
+      center:
+        text: S
+      bottomLeft:
+        # on remplace l'espace insecable
+        text: Oui
+        color: SECONDARY
+        swipeReturnText: OUI
+        size: SMALL
+    key1_1:
+      top:
+        text: U
+    key1_2:
+      bottomRight:
+        text: Non
+        color: SECONDARY
+        swipeReturnText: NON
+        size: SMALL
+      topLeft:
+        text: "Ç"
+        color: "SECONDARY"
+    key2_0:
+      left:
+        # on remplace les " asymetriques
+        text: J’ai
+        swipeReturnText: "Je suis "
+        size: SMALL
+        color: SECONDARY
+    key2_1:
+      center:
+        text: E
+      top:
+        text: Qu
+        swipeReturnText: QU
+        size: SMALL
+    key2_2:
+      right:
+        # on remplace les " asymetriques
+        text: Pour
+        swipeReturnText: POUR
+        color: SECONDARY
+        size: SMALLEST

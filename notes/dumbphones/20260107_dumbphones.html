@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-01-08 Thu 18:18 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dumphones</title>
+<meta name="author" content="Guillaume Coré (fridim)" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Dumphones</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org17ae134">Jelly Star (Unihertz)</a>
+<ul>
+<li><a href="#org629a850">Points forts:</a></li>
+<li><a href="#orgd523834">Points Faibles</a></li>
+<li><a href="#org92a820e">Conclusion</a></li>
+</ul>
+</li>
+<li><a href="#orga4febac">Mudita Kompakt</a>
+<ul>
+<li><a href="#org4ec4ba0">Points forts</a></li>
+<li><a href="#org7fe2cdf">Points faibles</a></li>
+</ul>
+</li>
+<li><a href="#orgeab2de4">Conclusion</a></li>
+</ul>
+</div>
+</div>
+<p>
+Voici mon expérience avec les &ldquo;dumbphones&rdquo;. Je mets des guillemets car il ne s&rsquo;agit pas vraiment de dumbphones à proprement parler &#x2013; à part l&rsquo;AGM M11 &#x2013; mais l&rsquo;idée reste la même: la détox. Je mets également derrière ce terme:
+</p>
+<ul class="org-ul">
+<li>feature phone</li>
+<li>&ldquo;dumbed down&rdquo; smartphone. Exemple: un smartphone qu&rsquo;on a configuré avec limite de temps via contrôle parental et en installant uniquement des applis avec UI minimalistes.</li>
+<li>boring phone</li>
+</ul>
+<p>
+Trop de temps perdu à scroller sans but, trop de fois surpris à prendre en main mon tel pour aucune raison apparente. Bref, le pitch est un peu rechauffé et probablement évident aujourd&rsquo;hui. On n&rsquo;est pas tous égaux et certaines personnes vont très bien réussir à se réguler ou supprimer les applis superflues ou &ldquo;toxiques&rdquo; de leur smartphone. Ce n&rsquo;est pas mon cas 😬.
+</p>
+
+<p>
+Donc ça fait plusieurs mois que j&rsquo;essaie une alternative plus radicale. Ça a commencé par l&rsquo;achat d&rsquo;un Jelly Star d&rsquo;Unihertz début 2025 comme téléphone principal.
+</p>
+<div id="outline-container-org17ae134" class="outline-2">
+<h2 id="org17ae134">Jelly Star (Unihertz)</h2>
+<div class="outline-text-2" id="text-org17ae134">
+<p>
+Ce petit smartphone a été mon téléphone principal pendant 8 mois.
+</p>
+
+
+<div id="org34a3ebb" class="figure">
+<p><img src="./20260106_jelly_star_form_factor.jpg" alt="20260106_jelly_star_form_factor.jpg" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Moins de 10cm de long, affichant KISS launcher, en niveau de gris</p>
+</div>
+
+<p>
+⇒ <a href="https://www.unihertz.com/products/jelly-star">spécifications officielles</a>
+</p>
+</div>
+<div id="outline-container-org629a850" class="outline-3">
+<h3 id="org629a850">Points forts:</h3>
+<div class="outline-text-3" id="text-org629a850">
+<ul class="org-ul">
+<li><p>
+L&rsquo;écran est minuscule.
+</p>
+
+<p>
+=&gt; Évite les dérives du type &ldquo;doomscrolling&rdquo; (instagram etc).
+On a vraiment aucune envie de passer du temps dessus. On fait ce qu&rsquo;on a à y faire, et on passe à autre chose. C&rsquo;est beaucoup trop petit et contraignant pour avoir envie d&rsquo;y passer plus de 30s. C&rsquo;est encore plus vrai en mode grayscale.
+</p></li>
+
+<li>La camera 48MP. C&rsquo;est pas du high end non plus, mais c&rsquo;est laaargement suffisant et je dis pas ça seulement pour scanner des QR codes.</li>
+<li>Le format, great form factor.
+C&rsquo;est très satisfaisant de sortir avec uniquement ce truc en poche. Les bords arrondis sont agreables à la prise en main.</li>
+<li>Bonnes performances. À part la taille et l&rsquo;écran, niveau hardware c&rsquo;est proche d&rsquo;un smartphone standard.</li>
+<li>prise jack pour le son</li>
+<li>Compatible Google, Play Services, Play Store etc. Les applications bancaires fonctionnent !
+Il est aussi possible d&rsquo;utiliser Uber par exemple. Tout est un peu laborieux mais rien d&rsquo;impossible.</li>
+<li>NFC</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd523834" class="outline-3">
+<h3 id="orgd523834">Points Faibles</h3>
+<div class="outline-text-3" id="text-orgd523834">
+<ul class="org-ul">
+<li><p>
+L&rsquo;écran est minuscule.
+</p>
+
+<p>
+Surprise ! C&rsquo;est pourtant <b>la</b> feature, mais c&rsquo;est aussi le souci avec ce téléphone quand on l&rsquo;envisage sur le long terme.
+Ça demande beaucoup de personnalisation pour que les menus soient lisibles, ou d&rsquo;y augmenter la taille de la police dans les applis qui le permettent (WhatsApp et Signal gèrent ça). Pour les autres tanpis, car augmenter la police de façon globale amène d&rsquo;autres problèmes qui sont encore plus difficiles à gérer: éléments visuels hors-écran, qu&rsquo;on ne peut pas voir ni cliquer.
+</p>
+
+<p>
+Pour écrire, il faut absolument une clavier alternatif genre <a href="https://f-droid.org/en/packages/io.github.sspanak.tt9/">traditional-T9</a> ou <a href="https://f-droid.org/en/packages/com.dessalines.thumbkey/">thumb-key</a>, dispos sur fdroid. Un truc classique genre gboard qwerty est trop petit c&rsquo;est l&rsquo;enfer.
+Le speech to text aide pas mal.
+</p></li>
+
+<li><p>
+Android 13 vieillissant
+</p>
+
+<p>
+Rien de rhédibitoire mais je ne crois pas qu&rsquo;il y ait une MAJ vers un android plus récent prévue par Unihertz. Il y a <a href="https://www.reddit.com/r/unihertz/comments/16sviga/unihertz_jelly_star_running_great_with_lineageos/">des utilisateurs</a> qui ont réussi à installer lineageos 20 dessus.
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org92a820e" class="outline-3">
+<h3 id="org92a820e">Conclusion</h3>
+<div class="outline-text-3" id="text-org92a820e">
+<p>
+Pour moi c&rsquo;est un téléphone de <b>transition</b> et de détox. Je ne me vois pas le garder comme téléphone principal pour du long terme (8 mois c&rsquo;était déjà pas mal…) En fait quand je lis un SMS, ou un message sur Signal, je ne suis pas en train de faire quelque chose de mal… et je ne veux pas me péter les yeux. Au départ, c&rsquo;est un désavantage calculé mais qui devient trop pénible sur le long terme, surtout quand on n&rsquo;a plus ses yeux de 20 ans.
+</p>
+
+<p>
+Il coche beaucoup de cases quand même. On peut tout faire et on n&rsquo;y passe pas trop de temps. Je dirais que si l&rsquo;interface était mieux customisée pour sa taille, ça serait pas loin d&rsquo;être parfait. Mais c&rsquo;est pas la norme et les applis sont souvent très peu adaptées au format. Rien d&rsquo;insurmontable mais ça va demander beaucoup trop d&rsquo;investissement en temps à mon avis et c&rsquo;est pas l&rsquo;idée. On veut se désintéresser de l&rsquo;objet, pas l&rsquo;inverse.
+</p>
+
+
+<p>
+J&rsquo;avais aussi envie d&rsquo;aller un peu plus loin. Avec ce tel, on est sur un smartphone déguisé. Ça fonctionne pour réduire le temps d&rsquo;écran, le compromis est pragmatique. Mais ce n&rsquo;est pas le changement que je veux voir opérer… puis je suis tombé sur:
+</p>
+
+<p>
+⇒ <a href="https://mudita.com/community/blog/introducing-mudita-mindful-design/">Introducing Mudita Mindful Design</a>
+</p>
+
+<p>
+Alors j&rsquo;ai tenté le coup et ai commandé le Mudita Kompakt.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orga4febac" class="outline-2">
+<h2 id="orga4febac">Mudita Kompakt</h2>
+<div class="outline-text-2" id="text-orga4febac">
+<p>
+Premier constat avec le mudita kompakt: je trimbale maintenant deux téléphones au lieu d&rsquo;un. Le kompakt et mon smartphone. Super 😅.
+Difficile de me passer de mon smartphone dès le premier jour. Il s&rsquo;agit davantage d&rsquo;une transition et ça prend du temps.
+Pour résumer, je dirais que pour chaque besoin ou utilisation, on a trois options:
+</p>
+<ul class="org-ul">
+<li>Faire autrement. C&rsquo;est toujours le mieux et le plus satisfaisant, je trouve.
+Ex: prendre sa carte bleue ou du cash et non pas payer avec le NFC de son tel</li>
+<li>Utiliser le dumbphone…</li>
+<li>… ou smartphone de secours (via hotspot ou wifi)</li>
+</ul>
+
+<p>
+Dans quelle categorie on tombe va dépendre des capacités du tel oubien de ce qu&rsquo;on est prêt à sideloader dessus. J&rsquo;essaie de trouver mon sweet spot et c&rsquo;est pas si évident.
+</p>
+
+<p>
+Un autre constat qui fait mal: c&rsquo;est un rabbit hole. Trop de temps et d&rsquo;énergie passés à essayer d&rsquo;étudier les options matérielles, scruter les forums, configurer le téléphone, essayer d&rsquo;installer manuellement tel ou tel APK, chercher des alternatives qui s&rsquo;affichent correctement sur l&rsquo;écran e-ink (y en a de plus en plus), et j&rsquo;en passe. Je suis pas loin de faire un factory reset et de me servir du produit tel que Mudita l&rsquo;a conçu, sans compromis. C&rsquo;est surtout une attitude et des habitudes à changer.
+</p>
+
+<p>
+Liste des modifications et applis que j&rsquo;ai ajoutées manuellement (via APK, F-Droid ou Aurora)
+</p>
+<ul class="org-ul">
+<li><a href="https://f-droid.org/packages/org.koreader.launcher.fdroid/">KOReader</a> - l&rsquo;application e-reader stock de Mudita est beaucoup moins bien que KOReader je trouve.</li>
+<li><a href="https://f-droid.org/packages/com.android.gpstest.osmdroid/">GPSTest</a> - Utile pour reset les données GPS quand on voyage</li>
+<li>keepass2android - Pour les mots de passe.  J&rsquo;ai testé aussi <a href="https://github.com/Kunzisoft/KeePassDX">KeePassDX</a>, les deux fonctionnent bien. keepass2android est stable depuis des années alors j&rsquo;ai pas vraiment vu l&rsquo;intérêt de changer.</li>
+<li>WhatsApp - must have malheureusement. WhatsApp et Signal (molly) drainent la batterie très rapidement car il n&rsquo;y a pas le Google Play Services Push Notifications, donc ça tourne en permanence pour checker s&rsquo;il y a de nouveaux messages.</li>
+<li><a href="https://molly.im/">Molly (Signal FOSS)</a></li>
+<li><a href="https://f-droid.org/packages/org.decsync.cc/">DecSync CC</a> - Pour synchroniser mes contacts en combo avec syncthing</li>
+<li>ProtonMail - Je ne l&rsquo;utilise pas, mais ça peut dépanner.</li>
+<li><a href="https://f-droid.org/packages/com.secuso.privacyFriendlyCodeScanner/">QR Scanner (PFA)</a> - pour les QR codes</li>
+<li><a href="https://f-droid.org/packages/com.aurora.store/">Aurora Store</a> - pour installer certaines applications, sans avoir besoin d&rsquo;un compte Google.</li>
+<li><a href="https://f-droid.org/packages/com.orgzlyrevived/">Orgzly Revived</a> - Mes notes et todo list synchronisé avec emacs via syncthing</li>
+<li><a href="https://github.com/davidraywilson/CalmDirectory">CalmDirectory</a> - Un annuaire. S&rsquo;affiche très bien sur le mudita.</li>
+<li><a href="https://f-droid.org/en/packages/com.wchung.qrshare/">qrshare</a> - Pour générer un QR code.  (utilisé 1 fois, pratique mais pas indispensable)</li>
+<li>F-droid - pour la plupart des apps ajoutées</li>
+<li><a href="https://f-droid.org/en/packages/com.donnnno.arcticons.light/">Arcticons</a> - des icons qui s&rsquo;affichent correctement sur l&rsquo;écran e-ink</li>
+<li>Proton Calendar - parce que .. synchronisé</li>
+<li><a href="https://github.com/davidraywilson/CalmCast">CalmCast</a> - Pour les podcasts. Développé spécifiquement pour le Kompakt. Un must-have.</li>
+<li><a href="https://f-droid.org/packages/superfreeze.tool.android/">superfreeze</a> - Pour kill ou freeze les applications. Cela permet de garder une bonne autonomie de la batterie. Selon l&rsquo;utilisation, je peux tenir 3 jours. En gardant whatsapp et Signal en background, c&rsquo;est plutôt 24h.
+Perso je kill tout de temps en temps. J&rsquo;accepte de ne pas recevoir les notifications WhatsApp ou Signal à cause de ça (on me SMS ou on m&rsquo;appelle si c&rsquo;est urgent).</li>
+<li>Mon <a href="https://github.com/fridim/KISS-eink">fork</a> de KISS launcher</li>
+<li><a href="https://f-droid.org/en/packages/info.plateaukao.einkbro/">einkbro</a> - Navigateur e-ink-friendly</li>
+<li><a href="https://f-droid.org/en/packages/org.shano.assistral/">assistral</a> - Pour les interactions avec Mistral LeChat</li>
+<li><a href="https://f-droid.org/en/packages/com.github.catfriend1.syncthingfork/">syncthingfork</a> - syncthing pour synchroniser des fichiers avec le laptop</li>
+<li><p>
+<a href="https://f-droid.org/en/packages/com.dessalines.thumbkey">thumbkey</a> - Clavier en partant de la disposition <a href="https://cisgressions.deuxfleurs.page/posts/thumbkey_frappefluide/">frappefluide</a>.
+</p>
+
+<p>
+En regardant la fréquence des lettres pour <a href="https://fr.wikipedia.org/wiki/Fr%C3%A9quence_d%27apparition_des_lettres">FR</a>  et <a href="https://en.wikipedia.org/wiki/Letter_frequency">EN</a>:
+</p>
+<ul class="org-ul">
+<li>inverser le O et le U</li>
+<li>inverser le E et le S. Le E juste au dessus de l&rsquo;espace</li>
+<li>virer les espaces insecables.. franchement on n&rsquo;est pas là pour écrire un livre. Je les ai remplacés par <code>oui</code> et <code>non</code></li>
+<li>virer <code>ll</code> et <code>oo</code>  c&rsquo;est hyper facile de double click sur une touche principale</li>
+<li>virer <code>[</code> et <code>]</code> que je n&rsquo;utilise pas et qui restent accessible en numérique. Les remplacer par le tréma et <code>ff</code></li>
+<li>remplacer les guillemets à l&rsquo;anglaise par <code>j’ai</code> et <code>pour</code></li>
+<li>Tous les accents sur le haut de la touche key0<sub>1</sub></li>
+<li>Déplacer <code>ô</code> sur la touche du O,  virer <code>î</code>  et <code>gh</code>. À la place:
+<ul class="org-ul">
+<li>&ldquo;c’est &rdquo; et &ldquo;c’était &rdquo; avec espace car ils ne finissent jamais une phrase.</li>
+<li><code>ment</code>, courant en français.</li>
+</ul></li>
+<li>Ajouter <code>pour</code>, <code>pas</code> et <code>OK</code></li>
+<li>Quelques raccourcis aller-retour (<code>swipeReturnText</code>):
+<ul class="org-ul">
+<li>sur <code>mm</code>:  &ldquo;même&rdquo;</li>
+<li>sur <code>OK</code>:  &ldquo;d’accord&rdquo;</li>
+<li>sur <code>j’ai</code>:  &ldquo;je suis &rdquo; avec espace car on finit rarement par &ldquo;je suis&rdquo;. Bon oui y a la phrase « Je pense, donc je suis » mais je ne vois pas d&rsquo;autre exemple.</li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+
+<div id="org5c65528" class="figure">
+<p><img src="./20260108-174421.png" alt="20260108-174421.png" />
+</p>
+<p><span class="figure-number">Figure 2: </span>le clavier thumb-key personnalisé</p>
+</div>
+
+<p>
+=&gt; <a href="thumb-key_modify_keys.yaml">yaml config</a> à insérer dans thumb-key directement
+</p>
+
+
+<p>
+J&rsquo;adhère complétement à ce que Mudita essaye de faire, notamment avec le Mudita Mindful Design (MDD). Quand on utilise les applications stock mudita, on se rend compte à quel point tout le reste de <del>l&rsquo;industrie du tabac</del> des géants de la tech est complétement fucké.
+Toutes les applications preinstallées avec le téléphone respectent ces règles d&rsquo;UI et design. Et c&rsquo;est vrai qu&rsquo;elles sont agréables. On voit même maintenant de plus en plus d&rsquo;applications sur ces principes venant de la communauté:
+</p>
+<ul class="org-ul">
+<li><a href="https://github.com/gezimos/inkOS">inkOS</a></li>
+<li><a href="https://github.com/davidraywilson/CalmDirectory">CalmDirectory</a></li>
+<li><a href="https://github.com/davidraywilson/CalmCast">CalmCast</a></li>
+<li><a href="https://github.com/lamdanAmiti/InkMessage">InkMessage</a></li>
+<li><a href="https://github.com/fridim/KISS-eink">KISS-eink</a></li>
+</ul>
+
+<p>
+Le dernier est un fork de <a href="https://kisslauncher.com/">KISS</a> que j&rsquo;ai fait et que j&rsquo;utilise sur le Mudita Kompakt.
+</p>
+</div>
+<div id="outline-container-org4ec4ba0" class="outline-3">
+<h3 id="org4ec4ba0">Points forts</h3>
+<div class="outline-text-3" id="text-org4ec4ba0">
+<ul class="org-ul">
+<li><p>
+L&rsquo;écran e-ink
+</p>
+
+<p>
+J&rsquo;adore cet écran. La résolution pourrait être meilleure, mais pour du texte c&rsquo;est amplement suffisant. Sans parler du fait qu&rsquo;en pleine lumière du jour, on y voit parfaitement. En terrasse à 13h, plein cagnard, c&rsquo;est encore plus lisible.
+Pour quand il fait sombre, il y a un rétro éclairage ajustable. Je le mets soit au minimum en soirée / voiture, soit éteint la journée.
+Avec <a href="https://f-droid.org/en/packages/org.koreader.launcher.fdroid/">KOReader</a>, je m&rsquo;en sers aussi comme liseuse. Ça tient dans la main et on peut touner les pages avec les boutons volume +/-.
+</p>
+
+
+<div id="org585a7fb" class="figure">
+<p><img src="./kompakt_ereader_small.jpg" alt="kompakt_ereader_small.jpg" />
+</p>
+<p><span class="figure-number">Figure 3: </span>lecture d&rsquo;EPUB sur KOReader (<a href="kompakt_ereader.jpg">full size</a>)</p>
+</div></li>
+
+<li><p>
+switch physique &ldquo;offline&rdquo;
+</p>
+
+<p>
+Très cool. On pourrait penser que c&rsquo;est gadget, que ça revient à se mettre en mode avion. Mais pas tout à fait. Ça éteint tous les connexions sans fil: cellulaire, wifi, bluetooth, … satisfaisant juste avant de se coucher, car très accessible: on n&rsquo;est pas obligé d&rsquo;allumer et de regarder le tel. Peut-être un peu trop accessible d&rsquo;ailleurs car ça m&rsquo;est arrivé une fois ou deux de l&rsquo;activer involontairement dans la poche.
+</p></li>
+
+<li>Fabriqué en Europe
+Entreprise polonaise, ça compte aussi.</li>
+
+<li>Sans Google. Pas de Play Store, pas de compte google
+C&rsquo;est ce que je voulais, mais je comprends que ça peut être vu comme un point négatif.</li>
+
+<li>Possibilité de sideloader des applications (APK, ou via F-droid, aurora store)</li>
+
+<li><p>
+Communauté active, SAV
+</p>
+
+<p>
+Mudita écoute les retours de ses utilisateurs et livre des mises à jour qui améliorent la partie software. Ils ne disent pas oui à tout, mais le fait qu&rsquo;ils continuent d&rsquo;améliorer et stabiliser leur produit est rassurant. Ils ne sont pas pressés et l&rsquo;intention est là.
+</p>
+
+<p>
+⇒ <a href="https://forum.mudita.com/">Mudita forum</a>
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7fe2cdf" class="outline-3">
+<h3 id="org7fe2cdf">Points faibles</h3>
+<div class="outline-text-3" id="text-org7fe2cdf">
+<ul class="org-ul">
+<li>Prix.</li>
+<li>Manque de performance dès qu&rsquo;on sort des applications Mudita supportées.</li>
+<li>Camera.
+Suffira pour scaner un QR code.</li>
+<li>L&rsquo;application Calendar préinstallée. 😠
+Local uniquement, pas de synchronisation.
+Elle n&rsquo;utilise pas la DB par défaut d&rsquo;android et n&rsquo;est donc pas synchronisable avec quelque chose comme <a href="https://f-droid.org/packages/org.decsync.cc/">DecSync CC</a>. J&rsquo;utilise proton calendar en attendant, mais ce n&rsquo;est pas du tout optimisé pour l&rsquo;écran e-ink. Je ne comprends vraiment pas ce choix de Mudita. Je veux de la synchronisation pour le calendrier car je veux passer <b>moins</b> de temps sur mon écran. Si je reçois une invitation calendrier (.ics par exemple) par email, je veux pouvoir accepter l&rsquo;invitation directement et que ce soit automatiquement synchronisé sur le téléphone. Imaginer devoir l&rsquo;entrer manuellement à chaque fois? Non merci.
+Bon cela dit, je crois que la synchro est prévue dans la roadmap de Mudita.</li>
+</ul>
+
+
+<div id="org6e1e585" class="figure">
+<p><img src="./jelly_star_and_kompakt_small.jpg" alt="jelly_star_and_kompakt_small.jpg" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Le Jelly Star et Mudita Kompakt côte à côte présentant respectivement les launchers KISS et KISS-eink (<a href="jelly_star_and_kompakt.jpg">full size</a>)</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgeab2de4" class="outline-2">
+<h2 id="orgeab2de4">Conclusion</h2>
+<div class="outline-text-2" id="text-orgeab2de4">
+<p>
+Ce qui fait chier dans tout ça c&rsquo;est qu&rsquo;on se retrouve à claquer $300 voire plus pour avoir <b>moins</b> de feature.
+C&rsquo;est encore hyper niche et les produits sont faits par des petites équipes: Minimal Phone, Mudita Kompakt, Light phone… et coûtent <b>une blinde</b>.
+Le light phone III serait le dumbphone idéal s&rsquo;il était pricé à $50. Pas $699. Non mais sérieux, $700 ?
+</p>
+
+<p>
+On est tellement habitué à chercher à résoudre un problème par une approche consumériste qu&rsquo;on en oublierait l&rsquo;essentiel.
+</p>
+
+<p>
+Mais pour conclure, après presque un an sur le sujet, je n&rsquo;ai aucune envie de revenir en arrière, au contraire. J&rsquo;y vois plus clair sur ce que je ne veux plus tolérer et laisser entrer dans mon quotidien.
+</p>
+
+<p>
+Je regrette qu&rsquo;il n&rsquo;y ait pas plus de standards en place pour les feature phones. On pourrait simplement avoir quelque chose à 30€ et qui nous ramenerait pas 20 ans en arrière. En parlant de standard, il y a <a href="https://developer.cloudphone.tech/">cloudphone</a> qui a l&rsquo;air intéressant. Ça permet de transformer le tel en simple terminal thin client-web et garder la partie compliquée sur les serveurs. Avec ce genre de norme, on pourrait avoir certaines applications utiles (transport public, annuraire, maps, …) sur des tels hyper bons marchés.
+L&rsquo;AGM M11 qui va sortir fin janvier est compatible Cloud Phone (nom de merde soit dit en passant), on verra bien si ça prend en Europe.
+</p>
+
+<p>
+Pour finir quelques liens:
+</p>
+<ul class="org-ul">
+<li><a href="https://www.dumbphones.org/">dumbphones.org</a></li>
+<li><a href="https://www.reddit.com/r/dumbphones/">Reddit r/dumbphones</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume Coré (fridim)</p>
+<p class="date">Created: 2026-01-08 Thu 18:18</p>
+</div>
+</body>
+</html>
