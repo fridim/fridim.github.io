@@ -1,6 +1,7 @@
-#+title: Dumphones
+#+title: Dumbphones
 #+author: Guillaume Coré (fridim)
 #+options: num:nil toc:t
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../org.css"/>
 
 Voici mon expérience avec les "dumbphones". Je mets des guillemets car il ne s'agit pas vraiment de dumbphones à proprement parler -- à part l'AGM M11 -- mais l'idée reste la même: la détox. Je mets également derrière ce terme:
 - feature phone
@@ -18,7 +19,7 @@ Ce petit smartphone a été mon téléphone principal pendant 8 mois.
 [[./20260106_jelly_star_form_factor.jpg]]
 
 ⇒ [[https://www.unihertz.com/products/jelly-star][spécifications officielles]]
-** Points forts:
+** Points forts
 - L'écran est minuscule.
 
   => Évite les dérives du type "doomscrolling" (instagram etc).
